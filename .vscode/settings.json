@@ -7,6 +7,5 @@
     ".gitignore": true,
     "pln_converter.iml": true,
     "pubspec.lock": true,
-    "analysis_options.yaml": true
   }
 }
