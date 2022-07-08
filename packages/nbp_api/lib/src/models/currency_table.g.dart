@@ -6,6 +6,12 @@ part of 'currency_table.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+CurrencyRate _$CurrencyRateFromJson(Map<String, dynamic> json) => CurrencyRate(
+      currency: json['currency'] as String,
+      code: json['code'] as String,
+      mid: (json['mid'] as num).toDouble(),
+    );
+
 CurrencyTable _$CurrencyTableFromJson(Map<String, dynamic> json) =>
     CurrencyTable(
       table: json['table'] as String,
@@ -14,10 +20,4 @@ CurrencyTable _$CurrencyTableFromJson(Map<String, dynamic> json) =>
       rates: (json['rates'] as List<dynamic>)
           .map((e) => CurrencyRate.fromJson(e as Map<String, dynamic>))
           .toList(),
-    );
-
-CurrencyRate _$CurrencyRateFromJson(Map<String, dynamic> json) => CurrencyRate(
-      currency: json['currency'] as String,
-      code: json['code'] as String,
-      mid: (json['mid'] as num).toDouble(),
     );
