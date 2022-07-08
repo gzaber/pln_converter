@@ -1,14 +1,20 @@
 name: nbp_api
-description: A starting point for Dart libraries or applications.
+description: NBP Web API client.
 version: 1.0.0
-# homepage: https://www.example.com
+publish_to: "none"
 
 environment:
-  sdk: '>=2.17.5 <3.0.0'
+  sdk: ">=2.17.5 <3.0.0"
 
-# dependencies:
-#   path: ^1.8.0
+dependencies:
+  dio: ^4.0.6
+  equatable: ^2.0.3
+  json_annotation: ^4.5.0
 
 dev_dependencies:
+  build_runner: ^2.1.11
+  coverage: ^1.5.0
+  json_serializable: ^6.2.0
   lints: ^2.0.0
+  mocktail: ^0.3.0
   test: ^1.16.0
