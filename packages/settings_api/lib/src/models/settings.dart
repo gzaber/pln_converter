@@ -9,19 +9,23 @@ enum AppTheme { light, dark }
 @JsonSerializable()
 class Settings extends Equatable {
   const Settings({
-    required this.currency,
+    required this.currencyCode,
+    required this.currencyTable,
     required this.theme,
   });
 
-  final String currency;
+  final String currencyCode;
+  final String currencyTable;
   final AppTheme theme;
 
   Settings copyWith({
-    String? currency,
+    String? currencyCode,
+    String? currencyTable,
     AppTheme? theme,
   }) {
     return Settings(
-      currency: currency ?? this.currency,
+      currencyCode: currencyCode ?? this.currencyCode,
+      currencyTable: currencyTable ?? this.currencyTable,
       theme: theme ?? this.theme,
     );
   }
@@ -32,5 +36,5 @@ class Settings extends Equatable {
   Map<String, dynamic> toJson() => _$SettingsToJson(this);
 
   @override
-  List<Object?> get props => [currency, theme];
+  List<Object?> get props => [currencyCode, currencyTable, theme];
 }

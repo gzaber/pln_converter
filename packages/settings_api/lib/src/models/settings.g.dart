@@ -7,12 +7,14 @@ part of 'settings.dart';
 // **************************************************************************
 
 Settings _$SettingsFromJson(Map<String, dynamic> json) => Settings(
-      currency: json['currency'] as String,
+      currencyCode: json['currencyCode'] as String,
+      currencyTable: json['currencyTable'] as String,
       theme: $enumDecode(_$AppThemeEnumMap, json['theme']),
     );
 
 Map<String, dynamic> _$SettingsToJson(Settings instance) => <String, dynamic>{
-      'currency': instance.currency,
+      'currencyCode': instance.currencyCode,
+      'currencyTable': instance.currencyTable,
       'theme': _$AppThemeEnumMap[instance.theme]!,
     };
 
