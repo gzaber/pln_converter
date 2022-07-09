@@ -16,6 +16,16 @@ class Settings extends Equatable {
   final String currency;
   final AppTheme theme;
 
+  Settings copyWith({
+    String? currency,
+    AppTheme? theme,
+  }) {
+    return Settings(
+      currency: currency ?? this.currency,
+      theme: theme ?? this.theme,
+    );
+  }
+
   factory Settings.fromJson(Map<String, dynamic> json) =>
       _$SettingsFromJson(json);
 
