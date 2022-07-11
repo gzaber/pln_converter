@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:settings_api/settings_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,28 +8,25 @@ class SharedPreferencesSettingsApi extends SettingsApi {
       : _prefs = prefs;
 
   final SharedPreferences _prefs;
+  static const _settingsKey = '__settings_key__';
 
   @override
   Settings? getSettings() {
-    final currencyCode = _prefs.getString('currencyCode');
-    final currencyTable = _prefs.getString('currencyTable');
-    final theme = _prefs.getString('theme');
-
-    if (currencyCode == null || currencyTable == null || theme == null) {
+    final settings = _prefs.getString(_settingsKey);
+    if (settings == null) {
       return null;
     } else {
-      return Settings(
-        currencyCode: currencyCode,
-        currencyTable: currencyTable,
-        theme: AppTheme.values.byName(theme),
+      return Settings.fromJson(
+        json.decode(settings),
       );
     }
   }
 
   @override
   Future<void> saveSettings(Settings settings) async {
-    await _prefs.setString('currencyCode', settings.currencyCode);
-    await _prefs.setString('currencyTable', settings.currencyTable);
-    await _prefs.setString('theme', settings.theme.name);
+    await _prefs.setString(
+      _settingsKey,
+      json.encode(settings.toJson()),
+    );
   }
 }
