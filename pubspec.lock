@@ -276,7 +276,7 @@ packages:
     source: hosted
     version: "0.3.0"
   nbp_api:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: "packages/nbp_api"
       relative: true
@@ -374,7 +374,7 @@ packages:
     source: hosted
     version: "2.1.1"
   settings_api:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: "packages/settings_api"
       relative: true

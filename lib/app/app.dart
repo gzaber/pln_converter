@@ -1,12 +1,28 @@
+import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:pln_converter/home/view/home_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pln_converter/home/home.dart';
+import 'package:settings_repository/settings_repository.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({
+    Key? key,
+    required this.settingsRepository,
+    required this.exchangeRatesRepository,
+  }) : super(key: key);
+
+  final SettingsRepository settingsRepository;
+  final ExchangeRatesRepository exchangeRatesRepository;
 
   @override
   Widget build(BuildContext context) {
-    return const AppView();
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: settingsRepository),
+        RepositoryProvider.value(value: exchangeRatesRepository),
+      ],
+      child: const AppView(),
+    );
   }
 }
 
