@@ -11,10 +11,6 @@ dependencies:
     sdk: flutter
   exchange_rates_repository:
     path: packages/exchange_rates_repository
-  nbp_api:
-    path: packages/nbp_api
-  settings_api:
-    path: packages/settings_api
   settings_repository:
     path: packages/settings_repository
   shared_preferences_settings_api:
