@@ -1,5 +1,5 @@
 name: pln_converter
-description: A new Flutter project.
+description: Polish zloty currency converter.
 publish_to: "none"
 version: 1.0.0+1
 
@@ -9,11 +9,26 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  exchange_rates_repository:
+    path: packages/exchange_rates_repository
+  nbp_api:
+    path: packages/nbp_api
+  settings_api:
+    path: packages/settings_api
+  settings_repository:
+    path: packages/settings_repository
+  shared_preferences_settings_api:
+    path: packages/shared_preferences_settings_api
+  bloc: ^8.0.3
+  flutter_bloc: ^8.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  bloc_test: ^9.0.3
+  mocktail: ^0.3.0
+  coverage: ^1.3.2
 
 flutter:
   uses-material-design: true
