@@ -16,6 +16,8 @@ class AppCubit extends Cubit<Settings> {
     final settings = settingsRepository.getSettings();
     if (settings != null) {
       emit(settings);
+    } else {
+      emit(defaultSettings);
     }
   }
 
