@@ -20,12 +20,12 @@ class AppCubit extends Cubit<Settings> {
   }
 
   saveCurrency(String code, String table) async {
-    emit(state.copyWith(currencyCode: code, currencyTable: table));
     await settingsRepository.saveSettings(state);
+    emit(state.copyWith(currencyCode: code, currencyTable: table));
   }
 
   saveTheme(AppTheme theme) async {
-    emit(state.copyWith(theme: theme));
     await settingsRepository.saveSettings(state);
+    emit(state.copyWith(theme: theme));
   }
 }
