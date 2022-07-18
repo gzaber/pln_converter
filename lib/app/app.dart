@@ -38,6 +38,7 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       themeMode: context.read<AppCubit>().state.theme == AppTheme.light
           ? ThemeMode.light
           : ThemeMode.dark,
