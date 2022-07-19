@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:pln_converter/app/cubit/app_cubit.dart';
+import 'package:pln_converter/settings/settings.dart';
 import 'package:settings_repository/settings_repository.dart';
 
 class MockSettingsRepository extends Mock implements SettingsRepository {}
@@ -9,13 +9,13 @@ class MockSettingsRepository extends Mock implements SettingsRepository {}
 class MockSettings extends Mock implements Settings {}
 
 void main() {
-  group('AppCubit', () {
+  group('SettingsCubit', () {
     late SettingsRepository settingsRepository;
-    late AppCubit appCubit;
+    late SettingsCubit settingsCubit;
 
     setUp(() {
       settingsRepository = MockSettingsRepository();
-      appCubit = AppCubit(settingsRepository: settingsRepository);
+      settingsCubit = SettingsCubit(settingsRepository: settingsRepository);
     });
 
     setUpAll(() {
@@ -35,24 +35,24 @@ void main() {
     );
 
     test('initial state is correct', () {
-      expect(appCubit.state, equals(defaultSettings));
+      expect(settingsCubit.state, equals(defaultSettings));
     });
 
     group('readSettings', () {
-      blocTest<AppCubit, Settings>(
+      blocTest<SettingsCubit, Settings>(
         'emits stored settings when read settings successfully',
         setUp: () => when(() => settingsRepository.getSettings())
             .thenReturn(storedSettings),
-        build: () => appCubit,
+        build: () => settingsCubit,
         act: (cubit) => cubit.readSettings(),
         expect: () => const <Settings>[storedSettings],
       );
 
-      blocTest<AppCubit, Settings>(
+      blocTest<SettingsCubit, Settings>(
         'emits default settings when read settings failure',
         setUp: () =>
             when(() => settingsRepository.getSettings()).thenReturn(null),
-        build: () => appCubit,
+        build: () => settingsCubit,
         act: (cubit) => cubit.readSettings(),
         expect: () => const <Settings>[defaultSettings],
       );
@@ -62,11 +62,11 @@ void main() {
       final codeTableBasedSettings =
           defaultSettings.copyWith(currencyCode: 'FJD', currencyTable: 'B');
 
-      blocTest<AppCubit, Settings>(
+      blocTest<SettingsCubit, Settings>(
         'emits settings based on currency code and table',
         setUp: () => when(() => settingsRepository.saveSettings(any()))
             .thenAnswer((_) => Future.value()),
-        build: () => appCubit,
+        build: () => settingsCubit,
         act: (cubit) => cubit.saveCurrency('FJD', 'B'),
         expect: () => <Settings>[codeTableBasedSettings],
       );
@@ -74,11 +74,11 @@ void main() {
 
     group('saveTheme', () {
       final themeBasedSettings = defaultSettings.copyWith(theme: AppTheme.dark);
-      blocTest<AppCubit, Settings>(
+      blocTest<SettingsCubit, Settings>(
         'emits settings based on app theme',
         setUp: () => when(() => settingsRepository.saveSettings(any()))
             .thenAnswer((_) => Future.value()),
-        build: () => appCubit,
+        build: () => settingsCubit,
         act: (cubit) => cubit.saveTheme(AppTheme.dark),
         expect: () => <Settings>[themeBasedSettings],
       );

@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:settings_repository/settings_repository.dart';
 
-class AppCubit extends Cubit<Settings> {
-  AppCubit({required this.settingsRepository}) : super(defaultSettings);
+class SettingsCubit extends Cubit<Settings> {
+  SettingsCubit({required this.settingsRepository}) : super(defaultSettings);
 
   final SettingsRepository settingsRepository;
 

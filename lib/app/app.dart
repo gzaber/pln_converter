@@ -1,8 +1,8 @@
 import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pln_converter/app/cubit/app_cubit.dart';
 import 'package:pln_converter/home/home.dart';
+import 'package:pln_converter/settings/settings.dart';
 import 'package:settings_repository/settings_repository.dart';
 
 class App extends StatelessWidget {
@@ -23,7 +23,7 @@ class App extends StatelessWidget {
         RepositoryProvider.value(value: exchangeRatesRepository),
       ],
       child: BlocProvider(
-        create: (context) => AppCubit(
+        create: (context) => SettingsCubit(
           settingsRepository: context.read<SettingsRepository>(),
         )..readSettings(),
         child: const AppView(),
@@ -37,11 +37,11 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = context.select((SettingsCubit cubit) => cubit.state.theme);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      themeMode: context.read<AppCubit>().state.theme == AppTheme.light
-          ? ThemeMode.light
-          : ThemeMode.dark,
+      theme: appTheme == AppTheme.light ? ThemeData.light() : ThemeData.dark(),
       title: 'PLN converter',
       home: const HomePage(),
     );
