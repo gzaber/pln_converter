@@ -37,11 +37,11 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = context.select((SettingsCubit cubit) => cubit.state.theme);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      themeMode: context.read<SettingsCubit>().state.theme == AppTheme.light
-          ? ThemeMode.light
-          : ThemeMode.dark,
+      theme: appTheme == AppTheme.light ? ThemeData.light() : ThemeData.dark(),
       title: 'PLN converter',
       home: const HomePage(),
     );
