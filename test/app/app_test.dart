@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pln_converter/app/app.dart';
-import 'package:pln_converter/app/cubit/app_cubit.dart';
 import 'package:pln_converter/home/home.dart';
+import 'package:pln_converter/settings/settings.dart';
 import 'package:settings_repository/settings_repository.dart';
 
 class MockSettingsRepository extends Mock implements SettingsRepository {}
@@ -14,7 +14,7 @@ class MockSettingsRepository extends Mock implements SettingsRepository {}
 class MockExchangeRatesRepository extends Mock
     implements ExchangeRatesRepository {}
 
-class MockAppCubit extends MockCubit<Settings> implements AppCubit {}
+class MockSettingsCubit extends MockCubit<Settings> implements SettingsCubit {}
 
 void main() {
   group('App', () {
@@ -39,22 +39,22 @@ void main() {
 
   group('AppView', () {
     late SettingsRepository settingsRepository;
-    late AppCubit appCubit;
+    late SettingsCubit settingsCubit;
 
     setUp(() {
       settingsRepository = MockSettingsRepository();
-      appCubit = MockAppCubit();
+      settingsCubit = MockSettingsCubit();
     });
 
     testWidgets('renders HomePage', (tester) async {
       const settings = Settings(
           currencyCode: 'USD', currencyTable: 'A', theme: AppTheme.light);
-      when(() => appCubit.state).thenReturn(settings);
+      when(() => settingsCubit.state).thenReturn(settings);
       await tester.pumpWidget(
         RepositoryProvider.value(
           value: settingsRepository,
           child: BlocProvider.value(
-            value: appCubit,
+            value: settingsCubit,
             child: const AppView(),
           ),
         ),
@@ -65,12 +65,12 @@ void main() {
     testWidgets('has correct theme', (tester) async {
       const settings = Settings(
           currencyCode: 'USD', currencyTable: 'A', theme: AppTheme.dark);
-      when(() => appCubit.state).thenReturn(settings);
+      when(() => settingsCubit.state).thenReturn(settings);
       await tester.pumpWidget(
         RepositoryProvider.value(
           value: settingsRepository,
           child: BlocProvider.value(
-            value: appCubit,
+            value: settingsCubit,
             child: const AppView(),
           ),
         ),
