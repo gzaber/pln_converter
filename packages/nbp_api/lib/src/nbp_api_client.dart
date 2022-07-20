@@ -16,7 +16,8 @@ class NotFoundFailure implements Exception {
 class NbpApiClient {
   NbpApiClient({Dio? dio}) : _dio = dio ?? Dio() {
     _dio.options.baseUrl = 'http://api.nbp.pl/api/exchangerates';
-    _dio.options.headers = {'Accept:': 'application/json'};
+    _dio.options.headers = {'Accept': 'application/json'};
+    _dio.options.responseType = ResponseType.plain;
     _dio.options.connectTimeout = 5000;
     _dio.options.receiveTimeout = 3000;
   }
@@ -30,7 +31,8 @@ class NbpApiClient {
       _checkStatusCode(currencyTableResponse);
     }
 
-    final currencyTableJson = jsonDecode(currencyTableResponse.data) as List;
+    final currencyTableJson =
+        jsonDecode(currencyTableResponse.data.toString()) as List;
 
     return CurrencyTable.fromJson(
         currencyTableJson.first as Map<String, dynamic>);
