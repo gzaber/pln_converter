@@ -24,27 +24,24 @@ class ExchangeRatesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Exchange rates'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: BlocConsumer<ExchangeRatesCubit, ExchangeRatesState>(
-          listener: (context, state) {
-            if (state.status == ExchangeRatesStatus.failure) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.errorMessage)));
-            }
-          },
-          builder: (context, state) {
-            if (state.status == ExchangeRatesStatus.loading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (state.status == ExchangeRatesStatus.success) {
-              return ListView.separated(
+      appBar: const _SearchAppBar(),
+      body: BlocConsumer<ExchangeRatesCubit, ExchangeRatesState>(
+        listener: (context, state) {
+          if (state.exchangeRatesStatus == ExchangeRatesStatus.failure) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+          }
+        },
+        builder: (context, state) {
+          if (state.exchangeRatesStatus == ExchangeRatesStatus.loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state.exchangeRatesStatus == ExchangeRatesStatus.success) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ListView.separated(
                 itemCount: state.exchangeRates.length,
                 itemBuilder: (context, index) {
                   return _CurrencyListTile(
@@ -53,14 +50,66 @@ class ExchangeRatesView extends StatelessWidget {
                 separatorBuilder: (context, index) {
                   return const Divider();
                 },
-              );
-            }
-            return const SizedBox();
-          },
-        ),
+              ),
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }
+}
+
+class _SearchAppBar extends StatelessWidget with PreferredSizeWidget {
+  const _SearchAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ExchangeRatesCubit, ExchangeRatesState>(
+      builder: (context, state) {
+        if (state.searchStatus == SearchStatus.on) {
+          return AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                context.read<ExchangeRatesCubit>().turnOffSearch();
+              },
+            ),
+            centerTitle: true,
+            title: SizedBox(
+              width: double.infinity,
+              height: 40.0,
+              child: TextField(
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {},
+                  ),
+                  hintText: 'Search...',
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          );
+        }
+        return AppBar(
+          title: const Text('Exchange rates'),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                context.read<ExchangeRatesCubit>().turnOnSearch();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size(double.infinity, 50);
 }
 
 class _CurrencyListTile extends StatelessWidget {

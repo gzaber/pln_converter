@@ -11,23 +11,31 @@ class ExchangeRatesCubit extends Cubit<ExchangeRatesState> {
   final ExchangeRatesRepository _exchangeRatesRepository;
 
   void getExchangeRates() async {
-    emit(state.copyWith(status: ExchangeRatesStatus.loading));
+    emit(state.copyWith(exchangeRatesStatus: ExchangeRatesStatus.loading));
     try {
       final result = await _exchangeRatesRepository.getCurrencies();
       emit(
         state.copyWith(
-          status: ExchangeRatesStatus.success,
+          exchangeRatesStatus: ExchangeRatesStatus.success,
           exchangeRates: result,
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
-          status: ExchangeRatesStatus.failure,
+          exchangeRatesStatus: ExchangeRatesStatus.failure,
           errorMessage: e.toString(),
         ),
       );
     }
+  }
+
+  void turnOnSearch() {
+    emit(state.copyWith(searchStatus: SearchStatus.on));
+  }
+
+  void turnOffSearch() {
+    emit(state.copyWith(searchStatus: SearchStatus.off));
   }
 
   List<Currency> search(String pattern) {
