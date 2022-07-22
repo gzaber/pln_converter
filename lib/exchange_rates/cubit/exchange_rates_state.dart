@@ -1,37 +1,39 @@
 part of 'exchange_rates_cubit.dart';
 
-enum ExchangeRatesStatus { loading, success, failure }
-
-enum SearchStatus { on, off }
+enum ExchangeRatesStatus { loading, success, failure, search }
 
 class ExchangeRatesState extends Equatable {
   const ExchangeRatesState({
-    this.exchangeRatesStatus = ExchangeRatesStatus.loading,
-    this.searchStatus = SearchStatus.off,
+    this.status = ExchangeRatesStatus.loading,
     this.exchangeRates = const [],
+    this.filteredList = const [],
     this.errorMessage = '',
   });
 
-  final ExchangeRatesStatus exchangeRatesStatus;
-  final SearchStatus searchStatus;
+  final ExchangeRatesStatus status;
   final List<Currency> exchangeRates;
+  final List<Currency> filteredList;
   final String errorMessage;
 
   ExchangeRatesState copyWith({
-    ExchangeRatesStatus? exchangeRatesStatus,
-    SearchStatus? searchStatus,
+    ExchangeRatesStatus? status,
     List<Currency>? exchangeRates,
+    List<Currency>? filteredList,
     String? errorMessage,
   }) {
     return ExchangeRatesState(
-      exchangeRatesStatus: exchangeRatesStatus ?? this.exchangeRatesStatus,
-      searchStatus: searchStatus ?? this.searchStatus,
+      status: status ?? this.status,
       exchangeRates: exchangeRates ?? this.exchangeRates,
+      filteredList: filteredList ?? this.filteredList,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object> get props =>
-      [exchangeRatesStatus, searchStatus, exchangeRates, errorMessage];
+  List<Object> get props => [
+        status,
+        exchangeRates,
+        filteredList,
+        errorMessage,
+      ];
 }

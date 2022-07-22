@@ -27,18 +27,18 @@ class ExchangeRatesView extends StatelessWidget {
       appBar: const _SearchAppBar(),
       body: BlocConsumer<ExchangeRatesCubit, ExchangeRatesState>(
         listener: (context, state) {
-          if (state.exchangeRatesStatus == ExchangeRatesStatus.failure) {
+          if (state.status == ExchangeRatesStatus.failure) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.errorMessage)));
           }
         },
         builder: (context, state) {
-          if (state.exchangeRatesStatus == ExchangeRatesStatus.loading) {
+          if (state.status == ExchangeRatesStatus.loading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-          if (state.exchangeRatesStatus == ExchangeRatesStatus.success) {
+          if (state.status == ExchangeRatesStatus.success) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ListView.separated(
@@ -46,6 +46,20 @@ class ExchangeRatesView extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return _CurrencyListTile(
                       currency: state.exchangeRates[index]);
+                },
+                separatorBuilder: (context, index) {
+                  return const Divider();
+                },
+              ),
+            );
+          }
+          if (state.status == ExchangeRatesStatus.search) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ListView.separated(
+                itemCount: state.filteredList.length,
+                itemBuilder: (context, index) {
+                  return _CurrencyListTile(currency: state.filteredList[index]);
                 },
                 separatorBuilder: (context, index) {
                   return const Divider();
@@ -65,13 +79,15 @@ class _SearchAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final searchController = TextEditingController();
     return BlocBuilder<ExchangeRatesCubit, ExchangeRatesState>(
       builder: (context, state) {
-        if (state.searchStatus == SearchStatus.on) {
+        if (state.status == ExchangeRatesStatus.search) {
           return AppBar(
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios),
               onPressed: () {
+                searchController.clear();
                 context.read<ExchangeRatesCubit>().turnOffSearch();
               },
             ),
@@ -80,10 +96,17 @@ class _SearchAppBar extends StatelessWidget with PreferredSizeWidget {
               width: double.infinity,
               height: 40.0,
               child: TextField(
+                controller: searchController,
+                onChanged: ((text) {
+                  context.read<ExchangeRatesCubit>().search(text);
+                }),
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.clear),
-                    onPressed: () {},
+                    onPressed: () {
+                      searchController.clear();
+                      context.read<ExchangeRatesCubit>().clearSearch();
+                    },
                   ),
                   hintText: 'Search...',
                   border: InputBorder.none,
