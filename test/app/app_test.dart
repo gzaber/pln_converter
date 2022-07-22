@@ -38,10 +38,12 @@ void main() {
   });
 
   group('AppView', () {
+    late ExchangeRatesRepository exchangeRatesRepository;
     late SettingsRepository settingsRepository;
     late SettingsCubit settingsCubit;
 
     setUp(() {
+      exchangeRatesRepository = MockExchangeRatesRepository();
       settingsRepository = MockSettingsRepository();
       settingsCubit = MockSettingsCubit();
     });
@@ -51,8 +53,15 @@ void main() {
           currencyCode: 'USD', currencyTable: 'A', theme: AppTheme.light);
       when(() => settingsCubit.state).thenReturn(settings);
       await tester.pumpWidget(
-        RepositoryProvider.value(
-          value: settingsRepository,
+        MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider.value(
+              value: settingsRepository,
+            ),
+            RepositoryProvider.value(
+              value: exchangeRatesRepository,
+            ),
+          ],
           child: BlocProvider.value(
             value: settingsCubit,
             child: const AppView(),
@@ -67,8 +76,13 @@ void main() {
           currencyCode: 'USD', currencyTable: 'A', theme: AppTheme.dark);
       when(() => settingsCubit.state).thenReturn(settings);
       await tester.pumpWidget(
-        RepositoryProvider.value(
-          value: settingsRepository,
+        MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider.value(
+              value: settingsRepository,
+            ),
+            RepositoryProvider.value(value: exchangeRatesRepository),
+          ],
           child: BlocProvider.value(
             value: settingsCubit,
             child: const AppView(),
