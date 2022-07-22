@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,12 +14,17 @@ class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {}
 
 class MockSettingsCubit extends MockCubit<Settings> implements SettingsCubit {}
 
+class MockExchangeRatesRepository extends Mock
+    implements ExchangeRatesRepository {}
+
 void main() {
   group('HomePage', () {
     late SettingsCubit settingsCubit;
+    late ExchangeRatesRepository exchangeRatesRepository;
 
     setUp(() {
       settingsCubit = MockSettingsCubit();
+      exchangeRatesRepository = MockExchangeRatesRepository();
       when(() => settingsCubit.state).thenReturn(
         const Settings(
           currencyCode: 'USD',
@@ -29,10 +35,13 @@ void main() {
     });
     testWidgets('renders HomeView', (tester) async {
       await tester.pumpWidget(
-        BlocProvider.value(
-          value: settingsCubit,
-          child: const MaterialApp(
-            home: HomePage(),
+        RepositoryProvider.value(
+          value: exchangeRatesRepository,
+          child: BlocProvider.value(
+            value: settingsCubit,
+            child: const MaterialApp(
+              home: HomePage(),
+            ),
           ),
         ),
       );
@@ -44,10 +53,12 @@ void main() {
   group('HomeView', () {
     late HomeCubit homeCubit;
     late SettingsCubit settingsCubit;
+    late ExchangeRatesRepository exchangeRatesRepository;
 
     setUp(() {
       homeCubit = MockHomeCubit();
       settingsCubit = MockSettingsCubit();
+      exchangeRatesRepository = MockExchangeRatesRepository();
       when(() => homeCubit.state).thenReturn(const HomeState());
       when(() => settingsCubit.state).thenReturn(
         const Settings(
@@ -62,12 +73,15 @@ void main() {
       when(() => homeCubit.state).thenReturn(const HomeState());
 
       await tester.pumpWidget(
-        BlocProvider.value(
-          value: settingsCubit,
-          child: MaterialApp(
-            home: BlocProvider.value(
-              value: homeCubit,
-              child: const HomeView(),
+        RepositoryProvider.value(
+          value: exchangeRatesRepository,
+          child: BlocProvider.value(
+            value: settingsCubit,
+            child: MaterialApp(
+              home: BlocProvider.value(
+                value: homeCubit,
+                child: const HomeView(),
+              ),
             ),
           ),
         ),
@@ -81,12 +95,15 @@ void main() {
           .thenReturn(const HomeState(tab: HomeTab.exchangeRates));
 
       await tester.pumpWidget(
-        BlocProvider.value(
-          value: settingsCubit,
-          child: MaterialApp(
-            home: BlocProvider.value(
-              value: homeCubit,
-              child: const HomeView(),
+        RepositoryProvider.value(
+          value: exchangeRatesRepository,
+          child: BlocProvider.value(
+            value: settingsCubit,
+            child: MaterialApp(
+              home: BlocProvider.value(
+                value: homeCubit,
+                child: const HomeView(),
+              ),
             ),
           ),
         ),
@@ -100,12 +117,15 @@ void main() {
           .thenReturn(const HomeState(tab: HomeTab.settings));
 
       await tester.pumpWidget(
-        BlocProvider.value(
-          value: settingsCubit,
-          child: MaterialApp(
-            home: BlocProvider.value(
-              value: homeCubit,
-              child: const HomeView(),
+        RepositoryProvider.value(
+          value: exchangeRatesRepository,
+          child: BlocProvider.value(
+            value: settingsCubit,
+            child: MaterialApp(
+              home: BlocProvider.value(
+                value: homeCubit,
+                child: const HomeView(),
+              ),
             ),
           ),
         ),
@@ -118,12 +138,15 @@ void main() {
         'calls setTab with HomeTab.converter on HomeCubit '
         'when converter button is pressed', (tester) async {
       await tester.pumpWidget(
-        BlocProvider.value(
-          value: settingsCubit,
-          child: MaterialApp(
-            home: BlocProvider.value(
-              value: homeCubit,
-              child: const HomeView(),
+        RepositoryProvider.value(
+          value: exchangeRatesRepository,
+          child: BlocProvider.value(
+            value: settingsCubit,
+            child: MaterialApp(
+              home: BlocProvider.value(
+                value: homeCubit,
+                child: const HomeView(),
+              ),
             ),
           ),
         ),
@@ -138,12 +161,15 @@ void main() {
         'calls setTab with HomeTab.exchangeRates on HomeCubit '
         'when exchange rates button is pressed', (tester) async {
       await tester.pumpWidget(
-        BlocProvider.value(
-          value: settingsCubit,
-          child: MaterialApp(
-            home: BlocProvider.value(
-              value: homeCubit,
-              child: const HomeView(),
+        RepositoryProvider.value(
+          value: exchangeRatesRepository,
+          child: BlocProvider.value(
+            value: settingsCubit,
+            child: MaterialApp(
+              home: BlocProvider.value(
+                value: homeCubit,
+                child: const HomeView(),
+              ),
             ),
           ),
         ),
@@ -158,12 +184,15 @@ void main() {
         'calls setTab with HomeTab.settings on HomeCubit '
         'when settings button is pressed', (tester) async {
       await tester.pumpWidget(
-        BlocProvider.value(
-          value: settingsCubit,
-          child: MaterialApp(
-            home: BlocProvider.value(
-              value: homeCubit,
-              child: const HomeView(),
+        RepositoryProvider.value(
+          value: exchangeRatesRepository,
+          child: BlocProvider.value(
+            value: settingsCubit,
+            child: MaterialApp(
+              home: BlocProvider.value(
+                value: homeCubit,
+                child: const HomeView(),
+              ),
             ),
           ),
         ),
