@@ -29,7 +29,8 @@ class ExchangeRatesView extends StatelessWidget {
         listener: (context, state) {
           if (state.status == ExchangeRatesStatus.failure) {
             ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(state.errorMessage)));
           }
         },
         builder: (context, state) {
