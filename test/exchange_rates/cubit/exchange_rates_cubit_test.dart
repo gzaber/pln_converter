@@ -32,8 +32,8 @@ void main() {
           name: 'dolar amerykański', code: 'USD', table: 'A', rate: 4.8284);
 
       blocTest<ExchangeRatesCubit, ExchangeRatesState>(
-        'emits state with success status and exchange rates list when successfully'
-        'fetched from API',
+        'emits state with success status and exchange rates list when '
+        'data successfully fetched',
         setUp: () {
           when(() => repository.getCurrencies()).thenAnswer((_) async => [usd]);
         },
@@ -46,6 +46,9 @@ void main() {
             exchangeRates: [usd],
           ),
         ],
+        verify: (_) {
+          verify(() => repository.getCurrencies()).called(1);
+        },
       );
 
       blocTest<ExchangeRatesCubit, ExchangeRatesState>(
@@ -63,6 +66,9 @@ void main() {
             errorMessage: 'Exception: failure',
           ),
         ],
+        verify: (_) {
+          verify(() => repository.getCurrencies()).called(1);
+        },
       );
     });
 
