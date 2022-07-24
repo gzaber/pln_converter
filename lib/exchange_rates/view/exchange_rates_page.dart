@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -147,11 +146,19 @@ class _CurrencyListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CachedNetworkImage(
-        imageUrl:
-            'https://countryflagsapi.com/png/${currency.code.substring(0, 2)}',
-        placeholder: (context, url) => const CircularProgressIndicator(),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
+      leading: Image.network(
+        'https://countryflagsapi.com/png/${currency.code.substring(0, 2)}',
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return const CircularProgressIndicator();
+        },
+        errorBuilder: (_, __, ___) {
+          return const SizedBox(
+            width: 60,
+            height: 40,
+            child: Icon(Icons.error),
+          );
+        },
         width: 60,
         height: 40,
         fit: BoxFit.cover,
