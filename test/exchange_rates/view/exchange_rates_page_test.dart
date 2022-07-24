@@ -46,6 +46,7 @@ void main() {
         name: 'dolar amerykański', code: 'USD', table: 'A', rate: 4.8284);
     final aud = Currency(
         name: 'dolar australijski', code: 'AUD', table: 'A', rate: 3.2449);
+    final eur = Currency(name: 'euro', code: 'EUR', table: 'A', rate: 4.7643);
 
     testWidgets('renders CircularProgressIndicator when data is loading',
         (tester) async {
@@ -65,12 +66,12 @@ void main() {
     });
 
     testWidgets(
-        'renders ListView with ListTiles when data is loaded successfully',
+        'renders ListView with ListTiles and Dividers when data is loaded successfully',
         (tester) async {
       when(() => exchangeRatesCubit.state).thenReturn(
         ExchangeRatesState(
           status: ExchangeRatesStatus.success,
-          exchangeRates: [usd, aud],
+          exchangeRates: [usd, aud, eur],
         ),
       );
 
@@ -84,7 +85,30 @@ void main() {
       );
 
       expect(find.byType(ListView), findsOneWidget);
-      expect(find.byType(ListTile), findsNWidgets(2));
+      expect(find.byType(ListTile), findsNWidgets(3));
+      expect(find.byType(Divider), findsNWidgets(2));
+    });
+
+    testWidgets('renders error icon when flag image is not found',
+        (tester) async {
+      when(() => exchangeRatesCubit.state).thenReturn(ExchangeRatesState(
+          status: ExchangeRatesStatus.success,
+          exchangeRates: [
+            Currency(name: 'SDR (MFW)', code: 'XDR', table: 'A', rate: 6.1441),
+          ]));
+
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: exchangeRatesCubit,
+          child: const MaterialApp(
+            home: ExchangeRatesView(),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      expect(find.byIcon(Icons.error), findsOneWidget);
     });
 
     testWidgets('shows SnackBar with error text when exception occurs',
@@ -164,19 +188,19 @@ void main() {
       verify(() => exchangeRatesCubit.turnOnSearch()).called(1);
     });
 
-    testWidgets('renders ListView with one ListTile when searching currency',
+    testWidgets('renders ListView with ListTiles when searching currency',
         (tester) async {
       when(() => exchangeRatesCubit.state).thenReturn(ExchangeRatesState(
         status: ExchangeRatesStatus.search,
-        exchangeRates: [usd, aud],
+        exchangeRates: [usd, aud, eur],
       ));
       whenListen(
           exchangeRatesCubit,
           Stream.fromIterable([
             ExchangeRatesState(
               status: ExchangeRatesStatus.search,
-              exchangeRates: [usd, aud],
-              filteredList: [aud],
+              exchangeRates: [usd, aud, eur],
+              filteredList: [aud, usd],
             ),
           ]));
 
@@ -189,13 +213,12 @@ void main() {
         ),
       );
 
-      await tester.enterText(find.byType(TextField), 'aus');
+      await tester.enterText(find.byType(TextField), 'dol');
       await tester.pump();
 
       expect(find.byType(ListView), findsOneWidget);
-      expect(find.byType(ListTile), findsOneWidget);
-      expect(find.text('dolar australijski'), findsOneWidget);
-      verify(() => exchangeRatesCubit.search('aus')).called(1);
+      expect(find.byType(ListTile), findsNWidgets(2));
+      verify(() => exchangeRatesCubit.search('dol')).called(1);
     });
 
     testWidgets('clears search TextField when clear button tapped',
