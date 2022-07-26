@@ -59,6 +59,8 @@ class ConverterView extends StatelessWidget {
                               code: 'PLN',
                               name: 'polski złoty',
                               value: state.plnValue,
+                              textFieldKey: const Key(
+                                  'converterPage_pln_value_textField'),
                               onSubmitted: context
                                   .read<ConverterCubit>()
                                   .convertPlnToForeignCurrency,
@@ -67,6 +69,8 @@ class ConverterView extends StatelessWidget {
                               code: state.foreignCurrency!.code,
                               name: state.foreignCurrency!.name,
                               value: state.foreignCurrencyValue,
+                              textFieldKey: const Key(
+                                  'converterPage_foreign_currency_value_textField'),
                               onSubmitted: context
                                   .read<ConverterCubit>()
                                   .convertForeignCurrencyToPln,
@@ -81,12 +85,16 @@ class ConverterView extends StatelessWidget {
                               name: state.foreignCurrency!.name,
                               value: state.foreignCurrencyValue,
                               enabled: false,
+                              textFieldKey: const Key(
+                                  'converterPage_foreign_currency_value_textField'),
                             )
                           : _CurrencyCard(
                               code: 'PLN',
                               name: 'polski złoty',
                               value: state.plnValue,
                               enabled: false,
+                              textFieldKey: const Key(
+                                  'converterPage_pln_value_textField'),
                             ),
                     ],
                   ),
@@ -138,6 +146,7 @@ class _CurrencyCard extends StatelessWidget {
     required this.name,
     required this.value,
     this.enabled = true,
+    this.textFieldKey,
     this.onSubmitted,
   }) : super(key: key);
 
@@ -145,6 +154,7 @@ class _CurrencyCard extends StatelessWidget {
   final String name;
   final double value;
   final bool enabled;
+  final Key? textFieldKey;
   final void Function(String)? onSubmitted;
 
   @override
@@ -178,6 +188,7 @@ class _CurrencyCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              key: textFieldKey,
               controller: TextEditingController(
                 text: currencyFormat.format(value),
               ),
@@ -186,7 +197,7 @@ class _CurrencyCard extends StatelessWidget {
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d{0,4})'))
+                FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d{0,4})')),
               ],
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),

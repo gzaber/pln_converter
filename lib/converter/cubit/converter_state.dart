@@ -21,8 +21,8 @@ class ConverterState extends Equatable {
 
   @override
   List<Object?> get props => [
-        foreignCurrency,
         status,
+        foreignCurrency,
         isPlnUp,
         plnValue,
         foreignCurrencyValue,
