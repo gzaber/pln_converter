@@ -80,8 +80,9 @@ void main() {
     });
 
     testWidgets(
-        'renders 2 ListTiles with data, and switch levels icon button '
-        'when data is loaded successfully', (tester) async {
+        'renders 2 ListTiles with data, change currency button '
+        'and switch levels button when data is loaded successfully',
+        (tester) async {
       when(() => converterCubit.state).thenReturn(
         ConverterState(status: ConverterStatus.success, foreignCurrency: usd),
       );
@@ -99,8 +100,9 @@ void main() {
       expect(find.byType(Image), findsNWidgets(2));
       expect(find.text('PLN'), findsOneWidget);
       expect(find.text('USD'), findsOneWidget);
-      expect(find.byType(IconButton), findsNWidgets(1));
+      expect(find.byType(IconButton), findsNWidgets(2));
       expect(find.byIcon(Icons.unfold_more), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_forward_ios), findsOneWidget);
     });
 
     testWidgets('renders error icon when flag image is not found',
