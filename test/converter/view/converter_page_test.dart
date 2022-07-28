@@ -3,7 +3,7 @@ import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:pln_converter/converter/converter.dart';
 import 'package:pln_converter/settings/settings.dart';
 import 'package:settings_repository/settings_repository.dart';
@@ -53,9 +53,19 @@ void main() {
 
   group('ConverterView', () {
     late ConverterCubit converterCubit;
+    late SettingsCubit settingsCubit;
 
     setUp(() {
       converterCubit = MockConverterCubit();
+      settingsCubit = MockSettingsCubit();
+
+      when(() => settingsCubit.state).thenReturn(
+        const Settings(
+          currencyCode: 'USD',
+          currencyTable: 'A',
+          theme: AppTheme.light,
+        ),
+      );
     });
 
     final usd = Currency(
@@ -80,8 +90,9 @@ void main() {
     });
 
     testWidgets(
-        'renders 2 ListTiles with data, and switch levels icon button '
-        'when data is loaded successfully', (tester) async {
+        'renders 2 ListTiles with data, change currency button '
+        'and switch levels button when data is loaded successfully',
+        (tester) async {
       when(() => converterCubit.state).thenReturn(
         ConverterState(status: ConverterStatus.success, foreignCurrency: usd),
       );
@@ -99,8 +110,9 @@ void main() {
       expect(find.byType(Image), findsNWidgets(2));
       expect(find.text('PLN'), findsOneWidget);
       expect(find.text('USD'), findsOneWidget);
-      expect(find.byType(IconButton), findsNWidgets(1));
+      expect(find.byType(IconButton), findsNWidgets(2));
       expect(find.byIcon(Icons.unfold_more), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_forward_ios), findsOneWidget);
     });
 
     testWidgets('renders error icon when flag image is not found',
@@ -277,6 +289,36 @@ void main() {
       expect(usdTextField.enabled, true);
       expect(plnTextField.controller?.text, '9.6568');
       expect(plnTextField.enabled, false);
+    });
+
+    testWidgets(
+        'routes to ChangeCurrencyPage when change currency '
+        'button is tapped', (tester) async {
+      final navigator = MockNavigator();
+      when(() => navigator.push<void>(any())).thenAnswer((_) async {});
+
+      when(() => converterCubit.state).thenReturn(
+        ConverterState(status: ConverterStatus.success, foreignCurrency: usd),
+      );
+
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: settingsCubit,
+          child: MaterialApp(
+            home: MockNavigatorProvider(
+              navigator: navigator,
+              child: BlocProvider.value(
+                value: converterCubit,
+                child: const ConverterView(),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.arrow_forward_ios));
+
+      verify(() => navigator.push<void>(any(that: isRoute<void>()))).called(1);
     });
   });
 }

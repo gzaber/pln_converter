@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:pln_converter/change_currency/change_currency.dart';
 import 'package:pln_converter/converter/cubit/converter_cubit.dart';
 import 'package:pln_converter/settings/cubit/settings_cubit.dart';
 
@@ -56,8 +57,6 @@ class ConverterView extends StatelessWidget {
                     children: [
                       state.isPlnUp
                           ? _CurrencyCard(
-                              code: 'PLN',
-                              name: 'polski złoty',
                               value: state.plnValue,
                               textFieldKey: const Key(
                                   'converterPage_pln_value_textField'),
@@ -66,6 +65,7 @@ class ConverterView extends StatelessWidget {
                                   .convertPlnToForeignCurrency,
                             )
                           : _CurrencyCard(
+                              isForeignCurrency: true,
                               code: state.foreignCurrency!.code,
                               name: state.foreignCurrency!.name,
                               value: state.foreignCurrencyValue,
@@ -81,18 +81,17 @@ class ConverterView extends StatelessWidget {
                       ),
                       state.isPlnUp
                           ? _CurrencyCard(
+                              isForeignCurrency: true,
                               code: state.foreignCurrency!.code,
                               name: state.foreignCurrency!.name,
                               value: state.foreignCurrencyValue,
-                              enabled: false,
+                              isEnabled: false,
                               textFieldKey: const Key(
                                   'converterPage_foreign_currency_value_textField'),
                             )
                           : _CurrencyCard(
-                              code: 'PLN',
-                              name: 'polski złoty',
                               value: state.plnValue,
-                              enabled: false,
+                              isEnabled: false,
                               textFieldKey: const Key(
                                   'converterPage_pln_value_textField'),
                             ),
@@ -142,10 +141,11 @@ class _SwitchRow extends StatelessWidget {
 class _CurrencyCard extends StatelessWidget {
   const _CurrencyCard({
     Key? key,
-    required this.code,
-    required this.name,
+    this.code = 'PLN',
+    this.name = 'polski złoty',
     required this.value,
-    this.enabled = true,
+    this.isEnabled = true,
+    this.isForeignCurrency = false,
     this.textFieldKey,
     this.onSubmitted,
   }) : super(key: key);
@@ -153,7 +153,8 @@ class _CurrencyCard extends StatelessWidget {
   final String code;
   final String name;
   final double value;
-  final bool enabled;
+  final bool isEnabled;
+  final bool isForeignCurrency;
   final Key? textFieldKey;
   final void Function(String)? onSubmitted;
 
@@ -184,6 +185,26 @@ class _CurrencyCard extends StatelessWidget {
             ),
             title: Text(code),
             subtitle: Text(name),
+            trailing: isForeignCurrency
+                ? IconButton(
+                    icon: const Icon(Icons.arrow_forward_ios),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push<void>(ChangeCurrencyPage.route())
+                          .then(
+                            (_) => context.read<ConverterCubit>().getCurrency(
+                                  table: context
+                                      .read<SettingsCubit>()
+                                      .state
+                                      .currencyTable,
+                                  code: context
+                                      .read<SettingsCubit>()
+                                      .state
+                                      .currencyCode,
+                                ),
+                          );
+                    })
+                : null,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -192,7 +213,7 @@ class _CurrencyCard extends StatelessWidget {
               controller: TextEditingController(
                 text: currencyFormat.format(value),
               ),
-              enabled: enabled,
+              enabled: isEnabled,
               textAlign: TextAlign.right,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
