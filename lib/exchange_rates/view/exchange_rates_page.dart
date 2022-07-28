@@ -132,7 +132,7 @@ class _SearchAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size(double.infinity, 50);
+  Size get preferredSize => const Size(double.infinity, 56);
 }
 
 class _CurrencyListTile extends StatelessWidget {
