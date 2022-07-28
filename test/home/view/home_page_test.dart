@@ -152,7 +152,7 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byIcon(Icons.currency_exchange));
+      await tester.tap(find.byIcon(Icons.autorenew));
 
       verify(() => homeCubit.setTab(HomeTab.converter)).called(1);
     });
