@@ -3,8 +3,10 @@ import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:pln_converter/change_currency/change_currency.dart';
+import 'package:pln_converter/settings/cubit/settings_cubit.dart';
+import 'package:settings_repository/settings_repository.dart';
 
 class MockExchangeRatesRepository extends Mock
     implements ExchangeRatesRepository {}
@@ -12,34 +14,18 @@ class MockExchangeRatesRepository extends Mock
 class MockChangeCurrencyCubit extends MockCubit<ChangeCurrencyState>
     implements ChangeCurrencyCubit {}
 
+class MockSettingsCubit extends MockCubit<Settings> implements SettingsCubit {}
+
 void main() {
   group('ChangeCurrencyPage', () {
-    late ExchangeRatesRepository exchangeRatesRepository;
-
-    setUp(() {
-      exchangeRatesRepository = MockExchangeRatesRepository();
-    });
-
-    testWidgets('renders ChangeCurrencyView', (tester) async {
-      await tester.pumpWidget(
-        RepositoryProvider.value(
-          value: exchangeRatesRepository,
-          child: const MaterialApp(
-            home: ChangeCurrencyPage(),
-          ),
-        ),
-      );
-
-      expect(find.byType(ChangeCurrencyView), findsOneWidget);
-      verify(() => exchangeRatesRepository.getCurrencies()).called(1);
-    });
-  });
-
-  group('ChangeCurrencyView', () {
+    late ExchangeRatesRepository repository;
     late ChangeCurrencyCubit changeCurrencyCubit;
+    late SettingsCubit settingsCubit;
 
     setUp(() {
+      repository = MockExchangeRatesRepository();
       changeCurrencyCubit = MockChangeCurrencyCubit();
+      settingsCubit = MockSettingsCubit();
     });
 
     final usd = Currency(
@@ -47,6 +33,31 @@ void main() {
     final aud = Currency(
         name: 'dolar australijski', code: 'AUD', table: 'A', rate: 3.2449);
     final eur = Currency(name: 'euro', code: 'EUR', table: 'A', rate: 4.7643);
+
+    testWidgets('is routable', (tester) async {
+      await tester.pumpWidget(
+        RepositoryProvider.value(
+          value: repository,
+          child: MaterialApp(
+            home: Builder(
+              builder: (context) => Scaffold(
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context).push<void>(
+                      ChangeCurrencyPage.route(),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+      expect(find.byType(ChangeCurrencyPage), findsOneWidget);
+    });
 
     testWidgets('renders CircularProgressIndicator when data is loading',
         (tester) async {
@@ -57,7 +68,7 @@ void main() {
         BlocProvider.value(
           value: changeCurrencyCubit,
           child: const MaterialApp(
-            home: ChangeCurrencyView(),
+            home: ChangeCurrencyPage(),
           ),
         ),
       );
@@ -79,7 +90,7 @@ void main() {
         BlocProvider.value(
           value: changeCurrencyCubit,
           child: const MaterialApp(
-            home: ChangeCurrencyView(),
+            home: ChangeCurrencyPage(),
           ),
         ),
       );
@@ -107,7 +118,7 @@ void main() {
         BlocProvider.value(
           value: changeCurrencyCubit,
           child: const MaterialApp(
-            home: ChangeCurrencyView(),
+            home: ChangeCurrencyPage(),
           ),
         ),
       );
@@ -133,7 +144,7 @@ void main() {
         BlocProvider.value(
           value: changeCurrencyCubit,
           child: const MaterialApp(
-            home: ChangeCurrencyView(),
+            home: ChangeCurrencyPage(),
           ),
         ),
       );
@@ -151,13 +162,46 @@ void main() {
         BlocProvider.value(
           value: changeCurrencyCubit,
           child: const MaterialApp(
-            home: ChangeCurrencyView(),
+            home: ChangeCurrencyPage(),
           ),
         ),
       );
 
       expect(find.byType(AppBar), findsOneWidget);
-      expect(find.text('Change currency'), findsOneWidget);
+      expect(
+        find.descendant(
+            of: find.byType(AppBar), matching: find.text('Change currency')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('pops when select currency button is tapped', (tester) async {
+      final navigator = MockNavigator();
+      when(() => navigator.pop<void>()).thenAnswer((_) async {});
+
+      when(() => changeCurrencyCubit.state).thenReturn(
+        ChangeCurrencyState(
+            status: ChangeCurrencyStatus.success, currencies: [usd]),
+      );
+
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: settingsCubit,
+          child: MaterialApp(
+            home: MockNavigatorProvider(
+              navigator: navigator,
+              child: BlocProvider.value(
+                value: changeCurrencyCubit,
+                child: const ChangeCurrencyPage(),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.arrow_forward_ios));
+
+      verify(() => navigator.pop<void>()).called(1);
     });
   });
 }

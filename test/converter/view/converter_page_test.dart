@@ -3,7 +3,7 @@ import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:mockingjay/mockingjay.dart';
 import 'package:pln_converter/converter/converter.dart';
 import 'package:pln_converter/settings/settings.dart';
 import 'package:settings_repository/settings_repository.dart';
@@ -53,9 +53,19 @@ void main() {
 
   group('ConverterView', () {
     late ConverterCubit converterCubit;
+    late SettingsCubit settingsCubit;
 
     setUp(() {
       converterCubit = MockConverterCubit();
+      settingsCubit = MockSettingsCubit();
+
+      when(() => settingsCubit.state).thenReturn(
+        const Settings(
+          currencyCode: 'USD',
+          currencyTable: 'A',
+          theme: AppTheme.light,
+        ),
+      );
     });
 
     final usd = Currency(
@@ -279,6 +289,36 @@ void main() {
       expect(usdTextField.enabled, true);
       expect(plnTextField.controller?.text, '9.6568');
       expect(plnTextField.enabled, false);
+    });
+
+    testWidgets(
+        'routes to ChangeCurrencyPage when change currency '
+        'button is tapped', (tester) async {
+      final navigator = MockNavigator();
+      when(() => navigator.push<void>(any())).thenAnswer((_) async {});
+
+      when(() => converterCubit.state).thenReturn(
+        ConverterState(status: ConverterStatus.success, foreignCurrency: usd),
+      );
+
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: settingsCubit,
+          child: MaterialApp(
+            home: MockNavigatorProvider(
+              navigator: navigator,
+              child: BlocProvider.value(
+                value: converterCubit,
+                child: const ConverterView(),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byIcon(Icons.arrow_forward_ios));
+
+      verify(() => navigator.push<void>(any(that: isRoute<void>()))).called(1);
     });
   });
 }
