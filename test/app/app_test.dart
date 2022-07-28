@@ -9,6 +9,31 @@ import 'package:pln_converter/home/home.dart';
 import 'package:pln_converter/settings/settings.dart';
 import 'package:settings_repository/settings_repository.dart';
 
+extension PumpView on WidgetTester {
+  Future<void> pumpAppView({
+    required SettingsRepository settingsRepository,
+    required ExchangeRatesRepository exchangeRatesRepository,
+    required SettingsCubit settingsCubit,
+  }) {
+    return pumpWidget(
+      MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider.value(
+            value: settingsRepository,
+          ),
+          RepositoryProvider.value(
+            value: exchangeRatesRepository,
+          ),
+        ],
+        child: BlocProvider.value(
+          value: settingsCubit,
+          child: const AppView(),
+        ),
+      ),
+    );
+  }
+}
+
 class MockSettingsRepository extends Mock implements SettingsRepository {}
 
 class MockExchangeRatesRepository extends Mock
@@ -52,22 +77,13 @@ void main() {
       const settings = Settings(
           currencyCode: 'USD', currencyTable: 'A', theme: AppTheme.light);
       when(() => settingsCubit.state).thenReturn(settings);
-      await tester.pumpWidget(
-        MultiRepositoryProvider(
-          providers: [
-            RepositoryProvider.value(
-              value: settingsRepository,
-            ),
-            RepositoryProvider.value(
-              value: exchangeRatesRepository,
-            ),
-          ],
-          child: BlocProvider.value(
-            value: settingsCubit,
-            child: const AppView(),
-          ),
-        ),
+
+      await tester.pumpAppView(
+        settingsRepository: settingsRepository,
+        exchangeRatesRepository: exchangeRatesRepository,
+        settingsCubit: settingsCubit,
       );
+
       expect(find.byType(HomePage), findsOneWidget);
     });
 
@@ -75,20 +91,13 @@ void main() {
       const settings = Settings(
           currencyCode: 'USD', currencyTable: 'A', theme: AppTheme.dark);
       when(() => settingsCubit.state).thenReturn(settings);
-      await tester.pumpWidget(
-        MultiRepositoryProvider(
-          providers: [
-            RepositoryProvider.value(
-              value: settingsRepository,
-            ),
-            RepositoryProvider.value(value: exchangeRatesRepository),
-          ],
-          child: BlocProvider.value(
-            value: settingsCubit,
-            child: const AppView(),
-          ),
-        ),
+
+      await tester.pumpAppView(
+        settingsRepository: settingsRepository,
+        exchangeRatesRepository: exchangeRatesRepository,
+        settingsCubit: settingsCubit,
       );
+
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(materialApp.theme, ThemeData.dark());
     });
