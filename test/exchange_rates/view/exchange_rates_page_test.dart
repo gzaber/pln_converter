@@ -124,7 +124,11 @@ void main() {
       await tester.pump();
 
       expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text('error'), findsOneWidget);
+      expect(
+        find.descendant(
+            of: find.byType(SnackBar), matching: find.text('error')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('renders AppBar with text and search icon', (tester) async {
@@ -135,7 +139,16 @@ void main() {
           exchangeRatesCubit: exchangeRatesCubit);
 
       expect(find.byType(AppBar), findsOneWidget);
-      expect(find.byIcon(Icons.search), findsOneWidget);
+      expect(
+        find.descendant(
+            of: find.byType(AppBar), matching: find.text('Exchange rates')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+            of: find.byType(AppBar), matching: find.byIcon(Icons.search)),
+        findsOneWidget,
+      );
     });
 
     testWidgets(

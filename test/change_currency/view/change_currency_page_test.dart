@@ -142,7 +142,11 @@ void main() {
       await tester.pump();
 
       expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text('error'), findsOneWidget);
+      expect(
+        find.descendant(
+            of: find.byType(SnackBar), matching: find.text('error')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('renders AppBar with text', (tester) async {

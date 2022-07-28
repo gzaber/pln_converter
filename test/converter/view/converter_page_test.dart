@@ -147,7 +147,11 @@ void main() {
       await tester.pump();
 
       expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text('error'), findsOneWidget);
+      expect(
+        find.descendant(
+            of: find.byType(SnackBar), matching: find.text('error')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('renders AppBar with text', (tester) async {
@@ -156,7 +160,11 @@ void main() {
       await tester.pumpConverterView(converterCubit: converterCubit);
 
       expect(find.byType(AppBar), findsOneWidget);
-      expect(find.text('PLN converter'), findsOneWidget);
+      expect(
+        find.descendant(
+            of: find.byType(AppBar), matching: find.text('PLN converter')),
+        findsOneWidget,
+      );
     });
 
     testWidgets(
