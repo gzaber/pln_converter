@@ -7,19 +7,18 @@ import 'package:pln_converter/settings/cubit/settings_cubit.dart';
 class ChangeCurrencyPage extends StatelessWidget {
   const ChangeCurrencyPage({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ChangeCurrencyCubit(
-        context.read<ExchangeRatesRepository>(),
-      )..loadCurrencies(),
-      child: const ChangeCurrencyView(),
+  static Route route() {
+    return MaterialPageRoute(
+      builder: (_) {
+        return BlocProvider(
+          create: (context) => ChangeCurrencyCubit(
+            context.read<ExchangeRatesRepository>(),
+          )..loadCurrencies(),
+          child: const ChangeCurrencyPage(),
+        );
+      },
     );
   }
-}
-
-class ChangeCurrencyView extends StatelessWidget {
-  const ChangeCurrencyView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +98,7 @@ class _CurrencyListTile extends StatelessWidget {
           context
               .read<SettingsCubit>()
               .saveCurrency(currency.code, currency.table);
-          Navigator.of(context).pop();
+          Navigator.of(context).pop<void>();
         },
       ),
     );

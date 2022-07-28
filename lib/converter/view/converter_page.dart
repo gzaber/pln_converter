@@ -190,8 +190,7 @@ class _CurrencyCard extends StatelessWidget {
                     icon: const Icon(Icons.arrow_forward_ios),
                     onPressed: () {
                       Navigator.of(context)
-                          .push(MaterialPageRoute(
-                              builder: (_) => const ChangeCurrencyPage()))
+                          .push<void>(ChangeCurrencyPage.route())
                           .then(
                             (_) => context.read<ConverterCubit>().getCurrency(
                                   table: context
@@ -204,8 +203,7 @@ class _CurrencyCard extends StatelessWidget {
                                       .currencyCode,
                                 ),
                           );
-                    },
-                  )
+                    })
                 : null,
           ),
           Padding(
