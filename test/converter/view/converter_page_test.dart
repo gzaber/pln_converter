@@ -8,6 +8,19 @@ import 'package:pln_converter/converter/converter.dart';
 import 'package:pln_converter/settings/settings.dart';
 import 'package:settings_repository/settings_repository.dart';
 
+extension PumpView on WidgetTester {
+  Future<void> pumpConverterView({required ConverterCubit converterCubit}) {
+    return pumpWidget(
+      MaterialApp(
+        home: BlocProvider.value(
+          value: converterCubit,
+          child: const ConverterView(),
+        ),
+      ),
+    );
+  }
+}
+
 class MockExchangeRatesRepository extends Mock
     implements ExchangeRatesRepository {}
 
@@ -77,14 +90,7 @@ void main() {
         const ConverterState(status: ConverterStatus.loading),
       );
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: converterCubit,
-          child: const MaterialApp(
-            home: ConverterView(),
-          ),
-        ),
-      );
+      await tester.pumpConverterView(converterCubit: converterCubit);
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -97,14 +103,7 @@ void main() {
         ConverterState(status: ConverterStatus.success, foreignCurrency: usd),
       );
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: converterCubit,
-          child: const MaterialApp(
-            home: ConverterView(),
-          ),
-        ),
-      );
+      await tester.pumpConverterView(converterCubit: converterCubit);
 
       expect(find.byType(ListTile), findsNWidgets(2));
       expect(find.byType(Image), findsNWidgets(2));
@@ -125,14 +124,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: converterCubit,
-          child: const MaterialApp(
-            home: ConverterView(),
-          ),
-        ),
-      );
+      await tester.pumpConverterView(converterCubit: converterCubit);
       await tester.pump();
 
       expect(find.byIcon(Icons.error), findsNWidgets(2));
@@ -151,14 +143,7 @@ void main() {
             )
           ]));
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: converterCubit,
-          child: const MaterialApp(
-            home: ConverterView(),
-          ),
-        ),
-      );
+      await tester.pumpConverterView(converterCubit: converterCubit);
       await tester.pump();
 
       expect(find.byType(SnackBar), findsOneWidget);
@@ -168,14 +153,7 @@ void main() {
     testWidgets('renders AppBar with text', (tester) async {
       when(() => converterCubit.state).thenReturn(const ConverterState());
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: converterCubit,
-          child: const MaterialApp(
-            home: ConverterView(),
-          ),
-        ),
-      );
+      await tester.pumpConverterView(converterCubit: converterCubit);
 
       expect(find.byType(AppBar), findsOneWidget);
       expect(find.text('PLN converter'), findsOneWidget);
@@ -193,14 +171,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: converterCubit,
-          child: const MaterialApp(
-            home: ConverterView(),
-          ),
-        ),
-      );
+      await tester.pumpConverterView(converterCubit: converterCubit);
 
       final plnTextField = tester.widget<TextField>(
           find.byKey(const Key('converterPage_pln_value_textField')));
@@ -223,14 +194,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: converterCubit,
-          child: const MaterialApp(
-            home: ConverterView(),
-          ),
-        ),
-      );
+      await tester.pumpConverterView(converterCubit: converterCubit);
 
       await tester.enterText(
         find.byKey(const Key('converterPage_pln_value_textField')),
@@ -262,14 +226,7 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: converterCubit,
-          child: const MaterialApp(
-            home: ConverterView(),
-          ),
-        ),
-      );
+      await tester.pumpConverterView(converterCubit: converterCubit);
 
       await tester.tap(find.byIcon(Icons.unfold_more));
       await tester.pump();

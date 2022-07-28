@@ -6,6 +6,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pln_converter/exchange_rates/exchange_rates.dart';
 
+extension PumpView on WidgetTester {
+  Future<void> pumpExchangeRatesView({
+    required ExchangeRatesCubit exchangeRatesCubit,
+  }) {
+    return pumpWidget(
+      MaterialApp(
+        home: BlocProvider.value(
+          value: exchangeRatesCubit,
+          child: const ExchangeRatesView(),
+        ),
+      ),
+    );
+  }
+}
+
 class MockExchangeRatesRepository extends Mock
     implements ExchangeRatesRepository {}
 
@@ -53,14 +68,8 @@ void main() {
       when(() => exchangeRatesCubit.state).thenReturn(
           const ExchangeRatesState(status: ExchangeRatesStatus.loading));
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: exchangeRatesCubit,
-          child: const MaterialApp(
-            home: ExchangeRatesView(),
-          ),
-        ),
-      );
+      await tester.pumpExchangeRatesView(
+          exchangeRatesCubit: exchangeRatesCubit);
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -75,14 +84,8 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: exchangeRatesCubit,
-          child: const MaterialApp(
-            home: ExchangeRatesView(),
-          ),
-        ),
-      );
+      await tester.pumpExchangeRatesView(
+          exchangeRatesCubit: exchangeRatesCubit);
 
       expect(find.byType(ListView), findsOneWidget);
       expect(find.byType(ListTile), findsNWidgets(3));
@@ -97,14 +100,8 @@ void main() {
             Currency(name: 'SDR (MFW)', code: 'XDR', table: 'A', rate: 6.1441),
           ]));
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: exchangeRatesCubit,
-          child: const MaterialApp(
-            home: ExchangeRatesView(),
-          ),
-        ),
-      );
+      await tester.pumpExchangeRatesView(
+          exchangeRatesCubit: exchangeRatesCubit);
 
       await tester.pump();
 
@@ -114,11 +111,7 @@ void main() {
     testWidgets('shows SnackBar with error text when exception occurs',
         (tester) async {
       when(() => exchangeRatesCubit.state).thenReturn(
-        const ExchangeRatesState(
-          status: ExchangeRatesStatus.failure,
-          errorMessage: 'error',
-        ),
-      );
+          const ExchangeRatesState(status: ExchangeRatesStatus.loading));
       whenListen(
           exchangeRatesCubit,
           Stream.fromIterable([
@@ -126,32 +119,20 @@ void main() {
                 status: ExchangeRatesStatus.failure, errorMessage: 'error'),
           ]));
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: exchangeRatesCubit,
-          child: const MaterialApp(
-            home: ExchangeRatesView(),
-          ),
-        ),
-      );
+      await tester.pumpExchangeRatesView(
+          exchangeRatesCubit: exchangeRatesCubit);
       await tester.pump();
 
       expect(find.byType(SnackBar), findsOneWidget);
       expect(find.text('error'), findsOneWidget);
     });
 
-    testWidgets('renders AppBar with search icon', (tester) async {
+    testWidgets('renders AppBar with text and search icon', (tester) async {
       when(() => exchangeRatesCubit.state)
           .thenReturn(const ExchangeRatesState());
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: exchangeRatesCubit,
-          child: const MaterialApp(
-            home: ExchangeRatesView(),
-          ),
-        ),
-      );
+      await tester.pumpExchangeRatesView(
+          exchangeRatesCubit: exchangeRatesCubit);
 
       expect(find.byType(AppBar), findsOneWidget);
       expect(find.byIcon(Icons.search), findsOneWidget);
@@ -170,14 +151,8 @@ void main() {
             ),
           ]));
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: exchangeRatesCubit,
-          child: const MaterialApp(
-            home: ExchangeRatesView(),
-          ),
-        ),
-      );
+      await tester.pumpExchangeRatesView(
+          exchangeRatesCubit: exchangeRatesCubit);
 
       await tester.tap(find.byIcon(Icons.search));
       await tester.pump();
@@ -204,14 +179,8 @@ void main() {
             ),
           ]));
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: exchangeRatesCubit,
-          child: const MaterialApp(
-            home: ExchangeRatesView(),
-          ),
-        ),
-      );
+      await tester.pumpExchangeRatesView(
+          exchangeRatesCubit: exchangeRatesCubit);
 
       await tester.enterText(find.byType(TextField), 'dol');
       await tester.pump();
@@ -227,14 +196,9 @@ void main() {
         status: ExchangeRatesStatus.search,
         exchangeRates: [usd, aud],
       ));
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: exchangeRatesCubit,
-          child: const MaterialApp(
-            home: ExchangeRatesView(),
-          ),
-        ),
-      );
+
+      await tester.pumpExchangeRatesView(
+          exchangeRatesCubit: exchangeRatesCubit);
 
       await tester.enterText(find.byType(TextField), 'aus');
       await tester.pump();
@@ -262,14 +226,8 @@ void main() {
             ),
           ]));
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: exchangeRatesCubit,
-          child: const MaterialApp(
-            home: ExchangeRatesView(),
-          ),
-        ),
-      );
+      await tester.pumpExchangeRatesView(
+          exchangeRatesCubit: exchangeRatesCubit);
 
       await tester.tap(find.byIcon(Icons.arrow_back_ios));
       await tester.pump();
