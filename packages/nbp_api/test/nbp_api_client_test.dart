@@ -38,29 +38,6 @@ void main() {
         ).called(1);
       });
 
-      test('throws BadRequestFailure on bad request or time limit exceeded',
-          () async {
-        final response = MockResponse();
-        when(() => response.statusCode).thenReturn(400);
-        when(() => response.data).thenReturn('data');
-        when(() => dioHttpClient.get(any())).thenAnswer((_) async => response);
-        expect(
-          () async => await nbpApiClient.getTable('A'),
-          throwsA(isA<BadRequestFailure>()),
-        );
-      });
-
-      test('throws NotFoundFailure on no data found', () async {
-        final response = MockResponse();
-        when(() => response.statusCode).thenReturn(404);
-        when(() => response.data).thenReturn('[{data}]');
-        when(() => dioHttpClient.get(any())).thenAnswer((_) async => response);
-        expect(
-          () async => await nbpApiClient.getTable('A'),
-          throwsA(isA<NotFoundFailure>()),
-        );
-      });
-
       test('returns CurrencyTable on valid response', () async {
         final response = MockResponse();
         when(() => response.statusCode).thenReturn(200);
@@ -102,6 +79,14 @@ void main() {
               ),
         );
       });
+
+      test('throws NbpApiFailure on exception', () async {
+        when(() => dioHttpClient.get(any())).thenThrow(DioError);
+        expect(
+          () async => await nbpApiClient.getTable('A'),
+          throwsA(isA<NbpApiFailure>()),
+        );
+      });
     });
 
     group('getCurrency', () {
@@ -116,29 +101,6 @@ void main() {
         verify(
           () => dioHttpClient.get('/rates/A/USD'),
         ).called(1);
-      });
-
-      test('throws BadRequestFailure on bad request or time limit exceeded',
-          () async {
-        final response = MockResponse();
-        when(() => response.statusCode).thenReturn(400);
-        when(() => response.data).thenReturn('data');
-        when(() => dioHttpClient.get(any())).thenAnswer((_) async => response);
-        expect(
-          () async => await nbpApiClient.getCurrency('A', 'USD'),
-          throwsA(isA<BadRequestFailure>()),
-        );
-      });
-
-      test('throws NotFoundFailure on no data found', () async {
-        final response = MockResponse();
-        when(() => response.statusCode).thenReturn(404);
-        when(() => response.data).thenReturn('[{data}]');
-        when(() => dioHttpClient.get(any())).thenAnswer((_) async => response);
-        expect(
-          () async => await nbpApiClient.getCurrency('A', 'USD'),
-          throwsA(isA<NotFoundFailure>()),
-        );
       });
 
       test('returns Currency on valid response', () async {
@@ -171,6 +133,110 @@ void main() {
                     .having((r) => r[0].mid, 'mid', 4.7417),
               ),
         );
+      });
+
+      test('throws NbpApiFailure on DioError', () async {
+        when(() => dioHttpClient.get(any())).thenThrow(DioError);
+        expect(
+          () async => await nbpApiClient.getCurrency('A', 'USD'),
+          throwsA(isA<NbpApiFailure>()),
+        );
+      });
+
+      test('throws NbpApiFailure on Exception', () async {
+        when(() => dioHttpClient.get(any())).thenThrow(Exception);
+        expect(
+          () async => await nbpApiClient.getCurrency('A', 'USD'),
+          throwsA(isA<NbpApiFailure>()),
+        );
+      });
+    });
+
+    group('NbpApiFailure', () {
+      test('throws NbpApiFailure on DioError.cancel', () async {
+        final dioError = DioError(
+          type: DioErrorType.cancel,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => dioHttpClient.get(any())).thenThrow(dioError);
+        expect(
+          () async => await nbpApiClient.getCurrency('A', 'USD'),
+          throwsA(isA<NbpApiFailure>()),
+        );
+      });
+      test('throws NbpApiFailure on DioError.connectTimeout', () async {
+        final dioError = DioError(
+          type: DioErrorType.connectTimeout,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => dioHttpClient.get(any())).thenThrow(dioError);
+        expect(
+          () async => await nbpApiClient.getCurrency('A', 'USD'),
+          throwsA(isA<NbpApiFailure>()),
+        );
+      });
+      test('throws NbpApiFailure on DioError.other', () async {
+        final dioError = DioError(
+          type: DioErrorType.other,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => dioHttpClient.get(any())).thenThrow(dioError);
+        expect(
+          () async => await nbpApiClient.getCurrency('A', 'USD'),
+          throwsA(isA<NbpApiFailure>()),
+        );
+      });
+
+      test('throws NbpApiFailure on DioError.other - no internet', () async {
+        final dioError = DioError(
+          type: DioErrorType.other,
+          requestOptions: RequestOptions(path: ''),
+          error: 'SocketException',
+        );
+        when(() => dioHttpClient.get(any())).thenThrow(dioError);
+        expect(
+          () async => await nbpApiClient.getCurrency('A', 'USD'),
+          throwsA(isA<NbpApiFailure>()),
+        );
+      });
+      test('throws NbpApiFailure on DioError.receiveTimeout', () async {
+        final dioError = DioError(
+          type: DioErrorType.receiveTimeout,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => dioHttpClient.get(any())).thenThrow(dioError);
+
+        expect(
+          () async => await nbpApiClient.getCurrency('A', 'USD'),
+          throwsA(isA<NbpApiFailure>()),
+        );
+      });
+      test('throws NbpApiFailure on DioError.response', () async {
+        final dioError = DioError(
+          type: DioErrorType.response,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => dioHttpClient.get(any())).thenThrow(dioError);
+        expect(
+          () async => await nbpApiClient.getCurrency('A', 'USD'),
+          throwsA(isA<NbpApiFailure>()),
+        );
+      });
+      test('throws NbpApiFailure on DioError.sendTimeout', () async {
+        final dioError = DioError(
+          type: DioErrorType.sendTimeout,
+          requestOptions: RequestOptions(path: ''),
+        );
+        when(() => dioHttpClient.get(any())).thenThrow(dioError);
+        expect(
+          () async => await nbpApiClient.getTable('A'),
+          throwsA(isA<NbpApiFailure>()),
+        );
+      });
+      test('return failure message', () {
+        final failure = NbpApiFailure();
+
+        expect(failure.toString(), isA<String>());
       });
     });
   });
