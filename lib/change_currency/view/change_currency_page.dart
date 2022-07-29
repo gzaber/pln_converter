@@ -41,6 +41,11 @@ class ChangeCurrencyPage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
+          if (state.status == ChangeCurrencyStatus.failure) {
+            return const Center(
+              child: Icon(Icons.error_outline, size: 64),
+            );
+          }
           if (state.status == ChangeCurrencyStatus.success) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

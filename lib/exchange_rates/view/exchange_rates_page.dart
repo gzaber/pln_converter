@@ -45,6 +45,11 @@ class ExchangeRatesView extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
+          if (state.status == ExchangeRatesStatus.failure) {
+            return const Center(
+              child: Icon(Icons.error_outline, size: 64),
+            );
+          }
           if (state.status == ExchangeRatesStatus.success) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

@@ -55,6 +55,11 @@ class ConverterView extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
+          if (state.status == ConverterStatus.failure) {
+            return const Center(
+              child: Icon(Icons.error_outline, size: 64),
+            );
+          }
           if (state.status == ConverterStatus.success) {
             if (state.foreignCurrency != null) {
               return SingleChildScrollView(
