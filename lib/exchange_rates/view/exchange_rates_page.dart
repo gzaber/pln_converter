@@ -158,22 +158,25 @@ class _CurrencyListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Image.network(
-        'https://countryflagsapi.com/png/${currency.code.substring(0, 2)}',
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return const CircularProgressIndicator();
-        },
-        errorBuilder: (_, __, ___) {
-          return const SizedBox(
-            width: 60,
-            height: 40,
-            child: Icon(Icons.error),
-          );
-        },
-        width: 60,
-        height: 40,
-        fit: BoxFit.cover,
+      leading: Material(
+        elevation: 8,
+        child: Image.network(
+          'https://countryflagsapi.com/png/${currency.code.substring(0, 2)}',
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const CircularProgressIndicator();
+          },
+          errorBuilder: (_, __, ___) {
+            return const SizedBox(
+              width: 60,
+              height: 40,
+              child: Icon(Icons.error),
+            );
+          },
+          width: 60,
+          height: 40,
+          fit: BoxFit.cover,
+        ),
       ),
       title: Text(currency.code),
       subtitle: Text(currency.name),
