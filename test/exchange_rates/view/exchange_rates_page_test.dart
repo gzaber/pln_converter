@@ -5,16 +5,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pln_converter/exchange_rates/exchange_rates.dart';
+import 'package:pln_converter/home/cubit/home_cubit.dart';
 
 extension PumpView on WidgetTester {
   Future<void> pumpExchangeRatesView({
     required ExchangeRatesCubit exchangeRatesCubit,
+    required HomeCubit homeCubit,
   }) {
     return pumpWidget(
-      MaterialApp(
-        home: BlocProvider.value(
-          value: exchangeRatesCubit,
-          child: const ExchangeRatesView(),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: exchangeRatesCubit),
+          BlocProvider.value(value: homeCubit),
+        ],
+        child: const MaterialApp(
+          home: ExchangeRatesView(),
         ),
       ),
     );
@@ -27,20 +32,30 @@ class MockExchangeRatesRepository extends Mock
 class MockExchangeRatesCubit extends MockCubit<ExchangeRatesState>
     implements ExchangeRatesCubit {}
 
+class MockHomeCubit extends MockCubit<HomeState> implements HomeCubit {}
+
 void main() {
   group('ExchangeRatesPage', () {
     late ExchangeRatesRepository exchangeRatesRepository;
+    late HomeCubit homeCubit;
 
     setUp(() {
       exchangeRatesRepository = MockExchangeRatesRepository();
+      homeCubit = MockHomeCubit();
+
+      when(() => homeCubit.state)
+          .thenReturn(const HomeState(tab: HomeTab.exchangeRates));
     });
 
     testWidgets('renders ExchangeRatesView', (tester) async {
       await tester.pumpWidget(
         RepositoryProvider.value(
           value: exchangeRatesRepository,
-          child: const MaterialApp(
-            home: ExchangeRatesPage(),
+          child: BlocProvider.value(
+            value: homeCubit,
+            child: const MaterialApp(
+              home: ExchangeRatesPage(),
+            ),
           ),
         ),
       );
@@ -52,9 +67,14 @@ void main() {
 
   group('ExchangeRatesView', () {
     late ExchangeRatesCubit exchangeRatesCubit;
+    late HomeCubit homeCubit;
 
     setUp(() {
       exchangeRatesCubit = MockExchangeRatesCubit();
+      homeCubit = MockHomeCubit();
+
+      when(() => homeCubit.state)
+          .thenReturn(const HomeState(tab: HomeTab.exchangeRates));
     });
 
     final usd = Currency(
@@ -69,7 +89,9 @@ void main() {
           const ExchangeRatesState(status: ExchangeRatesStatus.loading));
 
       await tester.pumpExchangeRatesView(
-          exchangeRatesCubit: exchangeRatesCubit);
+        exchangeRatesCubit: exchangeRatesCubit,
+        homeCubit: homeCubit,
+      );
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -85,7 +107,9 @@ void main() {
       );
 
       await tester.pumpExchangeRatesView(
-          exchangeRatesCubit: exchangeRatesCubit);
+        exchangeRatesCubit: exchangeRatesCubit,
+        homeCubit: homeCubit,
+      );
 
       expect(find.byType(ListView), findsOneWidget);
       expect(find.byType(ListTile), findsNWidgets(3));
@@ -101,7 +125,9 @@ void main() {
           ]));
 
       await tester.pumpExchangeRatesView(
-          exchangeRatesCubit: exchangeRatesCubit);
+        exchangeRatesCubit: exchangeRatesCubit,
+        homeCubit: homeCubit,
+      );
 
       await tester.pump();
 
@@ -120,7 +146,9 @@ void main() {
           ]));
 
       await tester.pumpExchangeRatesView(
-          exchangeRatesCubit: exchangeRatesCubit);
+        exchangeRatesCubit: exchangeRatesCubit,
+        homeCubit: homeCubit,
+      );
       await tester.pump();
 
       expect(find.byType(SnackBar), findsOneWidget);
@@ -136,7 +164,9 @@ void main() {
           .thenReturn(const ExchangeRatesState());
 
       await tester.pumpExchangeRatesView(
-          exchangeRatesCubit: exchangeRatesCubit);
+        exchangeRatesCubit: exchangeRatesCubit,
+        homeCubit: homeCubit,
+      );
 
       expect(find.byType(AppBar), findsOneWidget);
       expect(
@@ -165,7 +195,9 @@ void main() {
           ]));
 
       await tester.pumpExchangeRatesView(
-          exchangeRatesCubit: exchangeRatesCubit);
+        exchangeRatesCubit: exchangeRatesCubit,
+        homeCubit: homeCubit,
+      );
 
       await tester.tap(find.byIcon(Icons.search));
       await tester.pump();
@@ -193,7 +225,9 @@ void main() {
           ]));
 
       await tester.pumpExchangeRatesView(
-          exchangeRatesCubit: exchangeRatesCubit);
+        exchangeRatesCubit: exchangeRatesCubit,
+        homeCubit: homeCubit,
+      );
 
       await tester.enterText(find.byType(TextField), 'dol');
       await tester.pump();
@@ -211,7 +245,9 @@ void main() {
       ));
 
       await tester.pumpExchangeRatesView(
-          exchangeRatesCubit: exchangeRatesCubit);
+        exchangeRatesCubit: exchangeRatesCubit,
+        homeCubit: homeCubit,
+      );
 
       await tester.enterText(find.byType(TextField), 'aus');
       await tester.pump();
@@ -240,7 +276,9 @@ void main() {
           ]));
 
       await tester.pumpExchangeRatesView(
-          exchangeRatesCubit: exchangeRatesCubit);
+        exchangeRatesCubit: exchangeRatesCubit,
+        homeCubit: homeCubit,
+      );
 
       await tester.tap(find.byIcon(Icons.arrow_back_ios));
       await tester.pump();
