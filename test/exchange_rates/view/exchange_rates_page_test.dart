@@ -159,6 +159,18 @@ void main() {
       );
     });
 
+    testWidgets('renders error icon when exception occurs', (tester) async {
+      when(() => exchangeRatesCubit.state).thenReturn(
+          const ExchangeRatesState(status: ExchangeRatesStatus.failure));
+
+      await tester.pumpExchangeRatesView(
+        exchangeRatesCubit: exchangeRatesCubit,
+        homeCubit: homeCubit,
+      );
+
+      expect(find.byIcon(Icons.error_outline), findsOneWidget);
+    });
+
     testWidgets('renders AppBar with text and search icon', (tester) async {
       when(() => exchangeRatesCubit.state)
           .thenReturn(const ExchangeRatesState());

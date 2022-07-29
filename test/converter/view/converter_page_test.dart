@@ -198,6 +198,19 @@ void main() {
       );
     });
 
+    testWidgets('renders error icon when exception occurs', (tester) async {
+      when(() => converterCubit.state)
+          .thenReturn(const ConverterState(status: ConverterStatus.failure));
+
+      await tester.pumpConverterView(
+        converterCubit: converterCubit,
+        homeCubit: homeCubit,
+        settingsCubit: settingsCubit,
+      );
+
+      expect(find.byIcon(Icons.error_outline), findsOneWidget);
+    });
+
     testWidgets('renders AppBar with text', (tester) async {
       when(() => converterCubit.state).thenReturn(const ConverterState());
 
