@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pln_converter/change_currency/change_currency.dart';
 import 'package:pln_converter/converter/cubit/converter_cubit.dart';
+import 'package:pln_converter/home/home.dart';
 import 'package:pln_converter/settings/cubit/settings_cubit.dart';
 
 class ConverterPage extends StatelessWidget {
@@ -15,10 +16,7 @@ class ConverterPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ConverterCubit(
         context.read<ExchangeRatesRepository>(),
-      )..getCurrency(
-          table: context.read<SettingsCubit>().state.currencyTable,
-          code: context.read<SettingsCubit>().state.currencyCode,
-        ),
+      ),
       child: const ConverterView(),
     );
   }
@@ -29,6 +27,15 @@ class ConverterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSelected =
+        context.select((HomeCubit c) => c.state.tab == HomeTab.converter);
+    if (isSelected) {
+      context.read<ConverterCubit>().getCurrency(
+            table: context.read<SettingsCubit>().state.currencyTable,
+            code: context.read<SettingsCubit>().state.currencyCode,
+          );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('PLN converter'),

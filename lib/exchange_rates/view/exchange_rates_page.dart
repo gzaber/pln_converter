@@ -2,6 +2,7 @@ import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pln_converter/exchange_rates/exchange_rates.dart';
+import 'package:pln_converter/home/cubit/home_cubit.dart';
 
 class ExchangeRatesPage extends StatelessWidget {
   const ExchangeRatesPage({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class ExchangeRatesPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ExchangeRatesCubit(
         context.read<ExchangeRatesRepository>(),
-      )..getExchangeRates(),
+      ),
       child: const ExchangeRatesView(),
     );
   }
@@ -22,6 +23,12 @@ class ExchangeRatesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSelected =
+        context.select((HomeCubit c) => c.state.tab == HomeTab.exchangeRates);
+    if (isSelected) {
+      context.read<ExchangeRatesCubit>().getExchangeRates();
+    }
+
     return Scaffold(
       appBar: const _SearchAppBar(),
       body: BlocConsumer<ExchangeRatesCubit, ExchangeRatesState>(
