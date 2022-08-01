@@ -1,6 +1,7 @@
 import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pln_converter/exchange_rates/exchange_rates.dart';
 import 'package:pln_converter/home/cubit/home_cubit.dart';
 
@@ -120,7 +121,7 @@ class _SearchAppBar extends StatelessWidget with PreferredSizeWidget {
                       context.read<ExchangeRatesCubit>().clearSearch();
                     },
                   ),
-                  hintText: 'Search...',
+                  hintText: AppLocalizations.of(context)!.exchangeRatesSearch,
                   border: InputBorder.none,
                 ),
               ),
@@ -128,7 +129,7 @@ class _SearchAppBar extends StatelessWidget with PreferredSizeWidget {
           );
         }
         return AppBar(
-          title: const Text('Exchange rates'),
+          title: Text(AppLocalizations.of(context)!.exchangeRatesAppBarTitle),
           centerTitle: true,
           actions: [
             IconButton(

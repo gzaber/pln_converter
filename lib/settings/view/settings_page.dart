@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pln_converter/settings/settings.dart';
 import 'package:settings_repository/settings_repository.dart';
 
@@ -12,7 +13,7 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(AppLocalizations.of(context)!.settingsAppBarTitle),
         centerTitle: true,
       ),
       body: Padding(
@@ -21,12 +22,12 @@ class SettingsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Theme',
+              AppLocalizations.of(context)!.settingsTheme,
               style: Theme.of(context).textTheme.headline5,
             ),
             RadioListTile<AppTheme>(
               key: const Key('settingsPage_lightTheme_radioListTile'),
-              title: const Text('light'),
+              title: Text(AppLocalizations.of(context)!.settingsLight),
               value: AppTheme.light,
               groupValue: appTheme,
               onChanged: (theme) async {
@@ -35,7 +36,7 @@ class SettingsPage extends StatelessWidget {
             ),
             RadioListTile<AppTheme>(
               key: const Key('settingsPage_darkTheme_radioListTile'),
-              title: const Text('dark'),
+              title: Text(AppLocalizations.of(context)!.settingsDark),
               value: AppTheme.dark,
               groupValue: appTheme,
               onChanged: (theme) async {

@@ -1,0 +1,10 @@
+{
+    "converterAppBarTitle": "Konwerter PLN",
+    "exchangeRatesAppBarTitle": "Kursy walut",
+    "exchangeRatesSearch": "Szukaj...",
+    "settingsAppBarTitle": "Ustawienia",
+    "settingsTheme": "Motyw",
+    "settingsLight": "jasny",
+    "settingsDark": "ciemny",
+    "changeCurrencyAppBarTitle": "Zmiana waluty"
+}

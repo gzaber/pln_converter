@@ -2,10 +2,12 @@ import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:pln_converter/change_currency/change_currency.dart';
 import 'package:pln_converter/converter/cubit/converter_cubit.dart';
 import 'package:pln_converter/home/home.dart';
+
 import 'package:pln_converter/settings/cubit/settings_cubit.dart';
 
 class ConverterPage extends StatelessWidget {
@@ -38,7 +40,7 @@ class ConverterView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PLN converter'),
+        title: Text(AppLocalizations.of(context)!.converterAppBarTitle),
         centerTitle: true,
       ),
       body: BlocConsumer<ConverterCubit, ConverterState>(
@@ -154,7 +156,7 @@ class _CurrencyCard extends StatelessWidget {
   const _CurrencyCard({
     Key? key,
     this.code = 'PLN',
-    this.name = 'polski złoty',
+    this.name = 'złoty polski',
     required this.value,
     this.isEnabled = true,
     this.isForeignCurrency = false,

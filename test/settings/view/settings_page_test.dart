@@ -1,6 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pln_converter/settings/settings.dart';
@@ -28,6 +30,7 @@ void main() {
         BlocProvider.value(
           value: settingsCubit,
           child: const MaterialApp(
+            localizationsDelegates: [AppLocalizations.delegate],
             home: SettingsPage(),
           ),
         ),
@@ -36,9 +39,11 @@ void main() {
       expect(find.byType(AppBar), findsOneWidget);
       expect(find.byType(RadioListTile<AppTheme>), findsNWidgets(2));
 
-      expect(find.text('Settings'), findsOneWidget);
-      expect(find.text('light'), findsOneWidget);
-      expect(find.text('dark'), findsOneWidget);
+      expect(
+          find.text(AppLocalizationsEn().settingsAppBarTitle), findsOneWidget);
+      expect(find.text(AppLocalizationsEn().settingsTheme), findsOneWidget);
+      expect(find.text(AppLocalizationsEn().settingsLight), findsOneWidget);
+      expect(find.text(AppLocalizationsEn().settingsDark), findsOneWidget);
     });
 
     testWidgets('proper radio is checked', (tester) async {
@@ -54,6 +59,7 @@ void main() {
         BlocProvider.value(
           value: settingsCubit,
           child: const MaterialApp(
+            localizationsDelegates: [AppLocalizations.delegate],
             home: SettingsPage(),
           ),
         ),
@@ -74,6 +80,7 @@ void main() {
         BlocProvider.value(
           value: settingsCubit,
           child: const MaterialApp(
+            localizationsDelegates: [AppLocalizations.delegate],
             home: SettingsPage(),
           ),
         ),
@@ -100,6 +107,7 @@ void main() {
         BlocProvider.value(
           value: settingsCubit,
           child: const MaterialApp(
+            localizationsDelegates: [AppLocalizations.delegate],
             home: SettingsPage(),
           ),
         ),

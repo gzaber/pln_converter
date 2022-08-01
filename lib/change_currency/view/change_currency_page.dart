@@ -1,6 +1,7 @@
 import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pln_converter/change_currency/change_currency.dart';
 import 'package:pln_converter/settings/cubit/settings_cubit.dart';
 
@@ -24,7 +25,7 @@ class ChangeCurrencyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Change currency'),
+        title: Text(AppLocalizations.of(context)!.changeCurrencyAppBarTitle),
         centerTitle: true,
       ),
       body: BlocConsumer<ChangeCurrencyCubit, ChangeCurrencyState>(

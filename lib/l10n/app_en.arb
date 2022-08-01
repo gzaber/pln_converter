@@ -1,0 +1,10 @@
+{
+    "converterAppBarTitle": "PLN converter",
+    "exchangeRatesAppBarTitle": "Exchange rates",
+    "exchangeRatesSearch": "Search...",
+    "settingsAppBarTitle": "Settings",
+    "settingsTheme": "Theme",
+    "settingsLight": "light",
+    "settingsDark": "dark",
+    "changeCurrencyAppBarTitle": "Change currency"
+}
