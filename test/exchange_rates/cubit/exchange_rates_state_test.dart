@@ -1,13 +1,13 @@
 import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pln_converter/change_currency/change_currency.dart';
+import 'package:pln_converter/exchange_rates/cubit/exchange_rates_cubit.dart';
 
 void main() {
-  group('ChangeCurrencyState', () {
+  group('ExchangeRatesState', () {
     final usd = Currency(
         name: 'dolar amerykański', code: 'USD', table: 'A', rate: 4.8284);
 
-    ChangeCurrencyState createState() => const ChangeCurrencyState();
+    ExchangeRatesState createState() => const ExchangeRatesState();
 
     test('constructor works properly', () {
       expect(() => createState(), returnsNormally);
@@ -18,8 +18,10 @@ void main() {
     });
 
     test('props are correct', () {
-      expect(createState().props,
-          equals(<Object?>[ChangeCurrencyStatus.loading, const [], '']));
+      expect(
+        createState().props,
+        equals(<Object?>[ExchangeRatesStatus.loading, const [], const [], '']),
+      );
     });
 
     group('copyWith', () {
@@ -32,8 +34,11 @@ void main() {
 
       test('retains old parameter value if null is provided', () {
         expect(
-          createState()
-              .copyWith(status: null, currencies: null, errorMessage: null),
+          createState().copyWith(
+              status: null,
+              exchangeRates: null,
+              filteredList: null,
+              errorMessage: null),
           equals(createState()),
         );
       });
@@ -41,12 +46,14 @@ void main() {
       test('replaces non-null parameters', () {
         expect(
           createState().copyWith(
-              status: ChangeCurrencyStatus.failure,
-              currencies: [usd],
+              status: ExchangeRatesStatus.failure,
+              exchangeRates: [usd],
+              filteredList: [usd],
               errorMessage: 'failure'),
-          equals(ChangeCurrencyState(
-            status: ChangeCurrencyStatus.failure,
-            currencies: [usd],
+          equals(ExchangeRatesState(
+            status: ExchangeRatesStatus.failure,
+            exchangeRates: [usd],
+            filteredList: [usd],
             errorMessage: 'failure',
           )),
         );

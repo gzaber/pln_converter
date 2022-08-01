@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pln_converter/change_currency/change_currency.dart';
 import 'package:pln_converter/converter/cubit/converter_cubit.dart';
+import 'package:pln_converter/home/home.dart';
 import 'package:pln_converter/settings/cubit/settings_cubit.dart';
 
 class ConverterPage extends StatelessWidget {
@@ -15,10 +16,7 @@ class ConverterPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ConverterCubit(
         context.read<ExchangeRatesRepository>(),
-      )..getCurrency(
-          table: context.read<SettingsCubit>().state.currencyTable,
-          code: context.read<SettingsCubit>().state.currencyCode,
-        ),
+      ),
       child: const ConverterView(),
     );
   }
@@ -29,6 +27,15 @@ class ConverterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSelected =
+        context.select((HomeCubit c) => c.state.tab == HomeTab.converter);
+    if (isSelected) {
+      context.read<ConverterCubit>().getCurrency(
+            table: context.read<SettingsCubit>().state.currencyTable,
+            code: context.read<SettingsCubit>().state.currencyCode,
+          );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('PLN converter'),
@@ -46,6 +53,11 @@ class ConverterView extends StatelessWidget {
           if (state.status == ConverterStatus.loading) {
             return const Center(
               child: CircularProgressIndicator(),
+            );
+          }
+          if (state.status == ConverterStatus.failure) {
+            return const Center(
+              child: Icon(Icons.error_outline, size: 64),
             );
           }
           if (state.status == ConverterStatus.success) {
@@ -166,22 +178,25 @@ class _CurrencyCard extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            leading: Image.network(
-              'https://countryflagsapi.com/png/${code.substring(0, 2)}',
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return const CircularProgressIndicator();
-              },
-              errorBuilder: (_, __, ___) {
-                return const SizedBox(
-                  width: 60,
-                  height: 40,
-                  child: Icon(Icons.error),
-                );
-              },
-              width: 60,
-              height: 40,
-              fit: BoxFit.cover,
+            leading: Material(
+              elevation: 8,
+              child: Image.network(
+                'https://countryflagsapi.com/png/${code.substring(0, 2)}',
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const CircularProgressIndicator();
+                },
+                errorBuilder: (_, __, ___) {
+                  return const SizedBox(
+                    width: 60,
+                    height: 40,
+                    child: Icon(Icons.error),
+                  );
+                },
+                width: 60,
+                height: 40,
+                fit: BoxFit.cover,
+              ),
             ),
             title: Text(code),
             subtitle: Text(name),

@@ -1,13 +1,13 @@
 import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pln_converter/change_currency/change_currency.dart';
+import 'package:pln_converter/converter/converter.dart';
 
 void main() {
-  group('ChangeCurrencyState', () {
+  group('ConverterState', () {
     final usd = Currency(
         name: 'dolar amerykański', code: 'USD', table: 'A', rate: 4.8284);
 
-    ChangeCurrencyState createState() => const ChangeCurrencyState();
+    ConverterState createState() => const ConverterState();
 
     test('constructor works properly', () {
       expect(() => createState(), returnsNormally);
@@ -18,8 +18,10 @@ void main() {
     });
 
     test('props are correct', () {
-      expect(createState().props,
-          equals(<Object?>[ChangeCurrencyStatus.loading, const [], '']));
+      expect(
+        createState().props,
+        equals(<Object?>[ConverterStatus.loading, null, true, 0.0, 0.0, '']),
+      );
     });
 
     group('copyWith', () {
@@ -32,8 +34,13 @@ void main() {
 
       test('retains old parameter value if null is provided', () {
         expect(
-          createState()
-              .copyWith(status: null, currencies: null, errorMessage: null),
+          createState().copyWith(
+              status: null,
+              foreignCurrency: null,
+              isPlnUp: null,
+              plnValue: null,
+              foreignCurrencyValue: null,
+              errorMessage: null),
           equals(createState()),
         );
       });
@@ -41,14 +48,21 @@ void main() {
       test('replaces non-null parameters', () {
         expect(
           createState().copyWith(
-              status: ChangeCurrencyStatus.failure,
-              currencies: [usd],
+              status: ConverterStatus.failure,
+              foreignCurrency: usd,
+              isPlnUp: false,
+              plnValue: usd.rate * 2,
+              foreignCurrencyValue: 2,
               errorMessage: 'failure'),
-          equals(ChangeCurrencyState(
-            status: ChangeCurrencyStatus.failure,
-            currencies: [usd],
-            errorMessage: 'failure',
-          )),
+          equals(
+            ConverterState(
+                status: ConverterStatus.failure,
+                foreignCurrency: usd,
+                isPlnUp: false,
+                plnValue: usd.rate * 2,
+                foreignCurrencyValue: 2,
+                errorMessage: 'failure'),
+          ),
         );
       });
     });

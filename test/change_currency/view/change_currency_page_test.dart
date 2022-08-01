@@ -8,6 +8,21 @@ import 'package:pln_converter/change_currency/change_currency.dart';
 import 'package:pln_converter/settings/cubit/settings_cubit.dart';
 import 'package:settings_repository/settings_repository.dart';
 
+extension PumpView on WidgetTester {
+  Future<void> pumpChangeCurrencyPage({
+    required ChangeCurrencyCubit changeCurrencyCubit,
+  }) {
+    return pumpWidget(
+      MaterialApp(
+        home: BlocProvider.value(
+          value: changeCurrencyCubit,
+          child: const ChangeCurrencyPage(),
+        ),
+      ),
+    );
+  }
+}
+
 class MockExchangeRatesRepository extends Mock
     implements ExchangeRatesRepository {}
 
@@ -64,14 +79,8 @@ void main() {
       when(() => changeCurrencyCubit.state).thenReturn(
           const ChangeCurrencyState(status: ChangeCurrencyStatus.loading));
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: changeCurrencyCubit,
-          child: const MaterialApp(
-            home: ChangeCurrencyPage(),
-          ),
-        ),
-      );
+      await tester.pumpChangeCurrencyPage(
+          changeCurrencyCubit: changeCurrencyCubit);
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -86,14 +95,8 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: changeCurrencyCubit,
-          child: const MaterialApp(
-            home: ChangeCurrencyPage(),
-          ),
-        ),
-      );
+      await tester.pumpChangeCurrencyPage(
+          changeCurrencyCubit: changeCurrencyCubit);
 
       expect(find.byType(ListView), findsOneWidget);
       expect(find.byType(ListTile), findsNWidgets(3));
@@ -114,14 +117,8 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: changeCurrencyCubit,
-          child: const MaterialApp(
-            home: ChangeCurrencyPage(),
-          ),
-        ),
-      );
+      await tester.pumpChangeCurrencyPage(
+          changeCurrencyCubit: changeCurrencyCubit);
 
       await tester.pump();
 
@@ -140,32 +137,35 @@ void main() {
                 status: ChangeCurrencyStatus.failure, errorMessage: 'error'),
           ]));
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: changeCurrencyCubit,
-          child: const MaterialApp(
-            home: ChangeCurrencyPage(),
-          ),
-        ),
-      );
+      await tester.pumpChangeCurrencyPage(
+          changeCurrencyCubit: changeCurrencyCubit);
       await tester.pump();
 
       expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text('error'), findsOneWidget);
+      expect(
+        find.descendant(
+            of: find.byType(SnackBar), matching: find.text('error')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('renders error icon when exception occurs', (tester) async {
+      when(() => changeCurrencyCubit.state).thenReturn(
+        const ChangeCurrencyState(status: ChangeCurrencyStatus.failure),
+      );
+
+      await tester.pumpChangeCurrencyPage(
+          changeCurrencyCubit: changeCurrencyCubit);
+
+      expect(find.byIcon(Icons.error_outline), findsOneWidget);
     });
 
     testWidgets('renders AppBar with text', (tester) async {
       when(() => changeCurrencyCubit.state)
           .thenReturn(const ChangeCurrencyState());
 
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: changeCurrencyCubit,
-          child: const MaterialApp(
-            home: ChangeCurrencyPage(),
-          ),
-        ),
-      );
+      await tester.pumpChangeCurrencyPage(
+          changeCurrencyCubit: changeCurrencyCubit);
 
       expect(find.byType(AppBar), findsOneWidget);
       expect(

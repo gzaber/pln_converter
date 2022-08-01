@@ -37,7 +37,7 @@ class HomeView extends StatelessWidget {
             _HomeTabButton(
               groupValue: selectedTab,
               value: HomeTab.converter,
-              icon: const Icon(Icons.currency_exchange),
+              icon: const Icon(Icons.autorenew),
             ),
             _HomeTabButton(
               groupValue: selectedTab,

@@ -2,6 +2,7 @@ import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pln_converter/exchange_rates/exchange_rates.dart';
+import 'package:pln_converter/home/cubit/home_cubit.dart';
 
 class ExchangeRatesPage extends StatelessWidget {
   const ExchangeRatesPage({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class ExchangeRatesPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ExchangeRatesCubit(
         context.read<ExchangeRatesRepository>(),
-      )..getExchangeRates(),
+      ),
       child: const ExchangeRatesView(),
     );
   }
@@ -22,6 +23,12 @@ class ExchangeRatesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSelected =
+        context.select((HomeCubit c) => c.state.tab == HomeTab.exchangeRates);
+    if (isSelected) {
+      context.read<ExchangeRatesCubit>().getExchangeRates();
+    }
+
     return Scaffold(
       appBar: const _SearchAppBar(),
       body: BlocConsumer<ExchangeRatesCubit, ExchangeRatesState>(
@@ -36,6 +43,11 @@ class ExchangeRatesView extends StatelessWidget {
           if (state.status == ExchangeRatesStatus.loading) {
             return const Center(
               child: CircularProgressIndicator(),
+            );
+          }
+          if (state.status == ExchangeRatesStatus.failure) {
+            return const Center(
+              child: Icon(Icons.error_outline, size: 64),
             );
           }
           if (state.status == ExchangeRatesStatus.success) {
@@ -132,7 +144,7 @@ class _SearchAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size(double.infinity, 50);
+  Size get preferredSize => const Size(double.infinity, 56);
 }
 
 class _CurrencyListTile extends StatelessWidget {
@@ -146,22 +158,25 @@ class _CurrencyListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Image.network(
-        'https://countryflagsapi.com/png/${currency.code.substring(0, 2)}',
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return const CircularProgressIndicator();
-        },
-        errorBuilder: (_, __, ___) {
-          return const SizedBox(
-            width: 60,
-            height: 40,
-            child: Icon(Icons.error),
-          );
-        },
-        width: 60,
-        height: 40,
-        fit: BoxFit.cover,
+      leading: Material(
+        elevation: 8,
+        child: Image.network(
+          'https://countryflagsapi.com/png/${currency.code.substring(0, 2)}',
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const CircularProgressIndicator();
+          },
+          errorBuilder: (_, __, ___) {
+            return const SizedBox(
+              width: 60,
+              height: 40,
+              child: Icon(Icons.error),
+            );
+          },
+          width: 60,
+          height: 40,
+          fit: BoxFit.cover,
+        ),
       ),
       title: Text(currency.code),
       subtitle: Text(currency.name),
