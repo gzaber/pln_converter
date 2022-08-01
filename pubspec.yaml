@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   exchange_rates_repository:
     path: packages/exchange_rates_repository
   settings_repository:
@@ -30,4 +32,5 @@ dev_dependencies:
   mockingjay: ^0.3.0
 
 flutter:
+  generate: true
   uses-material-design: true

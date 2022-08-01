@@ -2,6 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:pln_converter/change_currency/change_currency.dart';
@@ -14,6 +16,7 @@ extension PumpView on WidgetTester {
   }) {
     return pumpWidget(
       MaterialApp(
+        localizationsDelegates: const [AppLocalizations.delegate],
         home: BlocProvider.value(
           value: changeCurrencyCubit,
           child: const ChangeCurrencyPage(),
@@ -54,6 +57,7 @@ void main() {
         RepositoryProvider.value(
           value: repository,
           child: MaterialApp(
+            localizationsDelegates: const [AppLocalizations.delegate],
             home: Builder(
               builder: (context) => Scaffold(
                 floatingActionButton: FloatingActionButton(
@@ -170,7 +174,9 @@ void main() {
       expect(find.byType(AppBar), findsOneWidget);
       expect(
         find.descendant(
-            of: find.byType(AppBar), matching: find.text('Change currency')),
+            of: find.byType(AppBar),
+            matching:
+                find.text(AppLocalizationsEn().changeCurrencyAppBarTitle)),
         findsOneWidget,
       );
     });
@@ -188,6 +194,7 @@ void main() {
         BlocProvider.value(
           value: settingsCubit,
           child: MaterialApp(
+            localizationsDelegates: const [AppLocalizations.delegate],
             home: MockNavigatorProvider(
               navigator: navigator,
               child: BlocProvider.value(

@@ -2,6 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:pln_converter/converter/converter.dart';
@@ -23,6 +25,7 @@ extension PumpView on WidgetTester {
           BlocProvider.value(value: settingsCubit),
         ],
         child: const MaterialApp(
+          localizationsDelegates: [AppLocalizations.delegate],
           home: ConverterView(),
         ),
       ),
@@ -77,6 +80,7 @@ void main() {
               ),
             ],
             child: const MaterialApp(
+              localizationsDelegates: [AppLocalizations.delegate],
               home: ConverterPage(),
             ),
           ),
@@ -223,7 +227,8 @@ void main() {
       expect(find.byType(AppBar), findsOneWidget);
       expect(
         find.descendant(
-            of: find.byType(AppBar), matching: find.text('PLN converter')),
+            of: find.byType(AppBar),
+            matching: find.text(AppLocalizationsEn().converterAppBarTitle)),
         findsOneWidget,
       );
     });
@@ -347,6 +352,7 @@ void main() {
             BlocProvider.value(value: settingsCubit),
           ],
           child: MaterialApp(
+            localizationsDelegates: const [AppLocalizations.delegate],
             home: MockNavigatorProvider(
               navigator: navigator,
               child: const ConverterView(),

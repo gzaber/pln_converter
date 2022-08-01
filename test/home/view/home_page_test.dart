@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pln_converter/converter/converter.dart';
@@ -22,6 +23,7 @@ extension PumpView on WidgetTester {
         child: BlocProvider.value(
           value: settingsCubit,
           child: MaterialApp(
+            localizationsDelegates: const [AppLocalizations.delegate],
             home: BlocProvider.value(
               value: homeCubit,
               child: const HomeView(),
@@ -63,6 +65,7 @@ void main() {
           child: BlocProvider.value(
             value: settingsCubit,
             child: const MaterialApp(
+              localizationsDelegates: [AppLocalizations.delegate],
               home: HomePage(),
             ),
           ),

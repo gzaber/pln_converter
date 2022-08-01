@@ -2,6 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:exchange_rates_repository/exchange_rates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pln_converter/exchange_rates/exchange_rates.dart';
@@ -19,6 +21,7 @@ extension PumpView on WidgetTester {
           BlocProvider.value(value: homeCubit),
         ],
         child: const MaterialApp(
+          localizationsDelegates: [AppLocalizations.delegate],
           home: ExchangeRatesView(),
         ),
       ),
@@ -54,6 +57,7 @@ void main() {
           child: BlocProvider.value(
             value: homeCubit,
             child: const MaterialApp(
+              localizationsDelegates: [AppLocalizations.delegate],
               home: ExchangeRatesPage(),
             ),
           ),
@@ -183,7 +187,8 @@ void main() {
       expect(find.byType(AppBar), findsOneWidget);
       expect(
         find.descendant(
-            of: find.byType(AppBar), matching: find.text('Exchange rates')),
+            of: find.byType(AppBar),
+            matching: find.text(AppLocalizationsEn().exchangeRatesAppBarTitle)),
         findsOneWidget,
       );
       expect(
