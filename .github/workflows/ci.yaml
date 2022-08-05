@@ -20,6 +20,8 @@ jobs:
       - run: flutter test --coverage
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   build_android:
     needs: [flutter_test]
