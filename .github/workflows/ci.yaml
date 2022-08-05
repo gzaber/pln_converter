@@ -19,8 +19,7 @@ jobs:
       - run: flutter pub get
       - run: flutter test --coverage
       - name: Upload coverage to codecov
-        run: curl -s https://codecov.io/bash
-        shell: bash
+        uses: codecov/codecov-action@v3
 
   build_android:
     needs: [flutter_test]
