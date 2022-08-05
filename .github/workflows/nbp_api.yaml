@@ -7,7 +7,8 @@ on:
 jobs:
   flutter_test:
     defaults:
-      working-directory: packages/nbp_api
+      run:
+        working-directory: packages/nbp_api
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
