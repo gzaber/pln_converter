@@ -1,8 +1,9 @@
 name: settings_api
 on:
   pull_request:
-    branches:
-      - master
+    paths:
+      - ".github/workflows/settings_api.yaml"
+      - "packages/settings_api/**"
 
 jobs:
   flutter_test:
