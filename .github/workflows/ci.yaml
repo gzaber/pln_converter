@@ -17,8 +17,7 @@ jobs:
         with:
           channel: "stable"
       - run: flutter pub get
-      - run: flutter test --coverage
-      - run: flutter test packages/settings_repository --coverage
+      - run: flutter test . --coverage
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v3
         with:
