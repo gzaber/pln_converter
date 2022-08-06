@@ -1,19 +1,19 @@
-name: nbp_api_test
+name: settings_api_test
 on:
   push:
     paths:
-      - "packages/nbp_api/**"
-      - ".github/workflows/nbp_api.yaml"
+      - "packages/settings_api/**"
+      - ".github/workflows/settings_api.yaml"
   pull_request:
     paths:
-      - "packages/nbp_api/**"
-      - ".github/workflows/nbp_api.yaml"
+      - "packages/settings_api/**"
+      - ".github/workflows/settings_api.yaml"
 
 jobs:
   flutter_test:
     defaults:
       run:
-        working-directory: packages/nbp_api
+        working-directory: packages/settings_api
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

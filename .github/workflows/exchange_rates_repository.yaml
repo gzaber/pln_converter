@@ -1,19 +1,19 @@
-name: nbp_api_test
+name: exchange_rates_repository_test
 on:
   push:
     paths:
-      - "packages/nbp_api/**"
-      - ".github/workflows/nbp_api.yaml"
+      - "packages/exchange_rates_repository/**"
+      - ".github/workflows/exchange_rates_repository.yaml"
   pull_request:
     paths:
-      - "packages/nbp_api/**"
-      - ".github/workflows/nbp_api.yaml"
+      - "packages/exchange_rates_repository/**"
+      - ".github/workflows/exchange_rates_repository.yaml"
 
 jobs:
   flutter_test:
     defaults:
       run:
-        working-directory: packages/nbp_api
+        working-directory: packages/exchange_rates_repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
