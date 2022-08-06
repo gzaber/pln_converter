@@ -2,7 +2,7 @@ name: exchange_rates_repository
 on:
   push:
     paths:
-    - ".github/workflows/exchange_rates_repository.yaml"
+      - ".github/workflows/exchange_rates_repository.yaml"
       - "packages/exchange_rates_repository/**"
 
 jobs:
