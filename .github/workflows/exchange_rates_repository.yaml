@@ -1,13 +1,9 @@
-name: exchange_rates_repository_test
+name: exchange_rates_repository
 on:
   push:
     paths:
+    - ".github/workflows/exchange_rates_repository.yaml"
       - "packages/exchange_rates_repository/**"
-      - ".github/workflows/exchange_rates_repository.yaml"
-  pull_request:
-    paths:
-      - "packages/exchange_rates_repository/**"
-      - ".github/workflows/exchange_rates_repository.yaml"
 
 jobs:
   flutter_test:
@@ -30,3 +26,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          name: exchange_rates_repository

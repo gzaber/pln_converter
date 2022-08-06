@@ -1,15 +1,15 @@
-name: nbp_api
+name: shared_preferences_settings_api
 on:
   push:
     paths:
-      - ".github/workflows/nbp_api.yaml"
-      - "packages/nbp_api/**"
+      - ".github/workflows/shared_preferences_settings_api.yaml"
+      - "packages/shared_preferences_settings_api/**"
 
 jobs:
   flutter_test:
     defaults:
       run:
-        working-directory: packages/nbp_api
+        working-directory: packages/shared_preferences_settings_api
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,4 +26,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          name: nbp_api
+          name: shared_preferences_settings_api
