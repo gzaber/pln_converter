@@ -1,9 +1,8 @@
 name: settings_repository
 on:
   pull_request:
-    paths:
-      - ".github/workflows/settings_repository.yaml"
-      - "packages/settings_repository/**"
+    branches:
+      - master
 
 jobs:
   flutter_test:
