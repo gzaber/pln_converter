@@ -1,9 +1,8 @@
 name: exchange_rates_repository
 on:
   pull_request:
-    paths:
-      - ".github/workflows/exchange_rates_repository.yaml"
-      - "packages/exchange_rates_repository/**"
+    branches:
+      - master
 
 jobs:
   flutter_test:

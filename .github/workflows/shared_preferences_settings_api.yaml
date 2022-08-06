@@ -1,9 +1,8 @@
 name: shared_preferences_settings_api
 on:
   pull_request:
-    paths:
-      - ".github/workflows/shared_preferences_settings_api.yaml"
-      - "packages/shared_preferences_settings_api/**"
+    branches:
+      - master
 
 jobs:
   flutter_test:
