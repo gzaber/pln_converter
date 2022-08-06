@@ -4,6 +4,10 @@ on:
     paths:
       - ".github/workflows/settings_api.yaml"
       - "packages/settings_api/**"
+  pull_request:
+    paths:
+      - ".github/workflows/settings_api.yaml"
+      - "packages/settings_api/**"
 
 jobs:
   flutter_test:

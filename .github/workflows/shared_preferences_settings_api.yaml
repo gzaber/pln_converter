@@ -4,6 +4,10 @@ on:
     paths:
       - ".github/workflows/shared_preferences_settings_api.yaml"
       - "packages/shared_preferences_settings_api/**"
+  pull_request:
+    paths:
+      - ".github/workflows/shared_preferences_settings_api.yaml"
+      - "packages/shared_preferences_settings_api/**"
 
 jobs:
   flutter_test:
