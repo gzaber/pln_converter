@@ -1,4 +1,4 @@
-name: ci
+name: main
 on:
   pull_request:
     branches:
@@ -22,6 +22,7 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          name: main
 
   # build_android:
   #   needs: [flutter_test]
