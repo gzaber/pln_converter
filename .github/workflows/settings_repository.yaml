@@ -1,9 +1,5 @@
 name: settings_repository
 on:
-  push:
-    paths:
-      - ".github/workflows/settings_repository.yaml"
-      - "packages/settings_repository/**"
   pull_request:
     paths:
       - ".github/workflows/settings_repository.yaml"

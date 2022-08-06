@@ -1,9 +1,5 @@
 name: nbp_api
 on:
-  push:
-    paths:
-      - ".github/workflows/nbp_api.yaml"
-      - "packages/nbp_api/**"
   pull_request:
     paths:
       - ".github/workflows/nbp_api.yaml"
