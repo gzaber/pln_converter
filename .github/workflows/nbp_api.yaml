@@ -1,9 +1,9 @@
 name: nbp_api_test
 on:
-  push:
-    paths:
-      - "packages/nbp_api/**"
-      - ".github/workflows/nbp_api.yaml"
+  # push:
+  #   paths:
+  #     - "packages/nbp_api/**"
+  #     - ".github/workflows/nbp_api.yaml"
   pull_request:
     paths:
       - "packages/nbp_api/**"
@@ -30,3 +30,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          name: nbp_api
