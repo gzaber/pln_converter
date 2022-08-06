@@ -1,16 +1,8 @@
-name: nbp_api_test
+name: nbp_api
 on:
   pull_request:
     branches:
       - master
-  # push:
-  #   paths:
-  #     - "packages/nbp_api/**"
-  #     - ".github/workflows/nbp_api.yaml"
-  # pull_request:
-  #   paths:
-  #     - "packages/nbp_api/**"
-  #     - ".github/workflows/nbp_api.yaml"
 
 jobs:
   flutter_test:
