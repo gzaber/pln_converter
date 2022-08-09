@@ -24,9 +24,9 @@ It uses [NBP Web API](http://api.nbp.pl/en.html) to fetching middle exchange rat
 [<img alt="Convert CHF to PLN" width="200px" src=".screenshots/home_converter_chf_up.png" />](.screenshots/home_converter_chf_up.png)
 
 [<img alt="Exchange rates" width="200px" src=".screenshots/home_exchange_rates.png" />](.screenshots/home_exchange_rates.png)
+[<img alt="Search exchange rates" width="200px" src=".screenshots/home_exchange_rates_search.png" />](.screenshots/home_exchange_rates_search.png)
 [<img alt="Settings dark theme" width="200px" src=".screenshots/home_settings.png" />](.screenshots/home_settings.png)
 [<img alt="Settings light theme" width="200px" src=".screenshots/home_settings_light_theme.png" />](.screenshots/home_settings_light_theme.png)
-[<img alt="Exchange rates light theme" width="200px" src=".screenshots/home_exchange_rates_light_theme.png" />](.screenshots/home_exchange_rates_light_theme.png)
 
 ## Features
 
