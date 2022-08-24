@@ -106,7 +106,24 @@ void main() {
           name: 'dolar australijski', code: 'AUD', table: 'A', rate: 3.2449);
 
       blocTest<ExchangeRatesCubit, ExchangeRatesState>(
-        'emits filtered list',
+        'emits state with empty filtered list when pattern is empty',
+        seed: () => ExchangeRatesState(
+            status: ExchangeRatesStatus.search,
+            exchangeRates: [aud, usd],
+            filteredList: [aud]),
+        build: () => buildCubit(),
+        act: (cubit) => cubit.search(''),
+        expect: () => [
+          ExchangeRatesState(
+            status: ExchangeRatesStatus.search,
+            exchangeRates: [aud, usd],
+            filteredList: const [],
+          ),
+        ],
+      );
+
+      blocTest<ExchangeRatesCubit, ExchangeRatesState>(
+        'emits state with filtered list containing search results',
         seed: () => ExchangeRatesState(
             status: ExchangeRatesStatus.search,
             exchangeRates: [aud, usd],
