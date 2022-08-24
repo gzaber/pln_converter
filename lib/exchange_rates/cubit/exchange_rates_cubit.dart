@@ -44,6 +44,10 @@ class ExchangeRatesCubit extends Cubit<ExchangeRatesState> {
   }
 
   void search(String pattern) {
+    if (pattern.isEmpty) {
+      emit(state.copyWith(filteredList: const []));
+      return;
+    }
     final filteredList = state.exchangeRates
         .where((currency) =>
             currency.code.toLowerCase().contains(pattern.toLowerCase()) ||
