@@ -232,8 +232,8 @@ class _CurrencyCard extends StatelessWidget {
               ),
               enabled: isEnabled,
               textAlign: TextAlign.right,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true, signed: true),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d{0,4})')),
               ],
