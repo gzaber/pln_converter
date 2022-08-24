@@ -115,7 +115,7 @@ class _SearchAppBar extends StatelessWidget with PreferredSizeWidget {
                 }),
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
+                    icon: const Icon(Icons.clear, color: Colors.white),
                     onPressed: () {
                       searchController.clear();
                       context.read<ExchangeRatesCubit>().clearSearch();
@@ -128,6 +128,7 @@ class _SearchAppBar extends StatelessWidget with PreferredSizeWidget {
             ),
           );
         }
+        searchController.clear();
         return AppBar(
           title: Text(AppLocalizations.of(context)!.exchangeRatesAppBarTitle),
           centerTitle: true,
