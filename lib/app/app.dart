@@ -44,7 +44,13 @@ class AppView extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: appTheme == AppTheme.light ? ThemeData.light() : ThemeData.dark(),
+      theme: appTheme == AppTheme.light
+          ? ThemeData.light().copyWith(
+              textSelectionTheme: const TextSelectionThemeData(
+                  cursorColor: Colors.amber,
+                  selectionColor: Colors.amber,
+                  selectionHandleColor: Colors.amber))
+          : ThemeData.dark(),
       title: 'PLN converter',
       home: const HomePage(),
     );
