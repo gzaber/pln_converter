@@ -2,9 +2,9 @@ name: shared_preferences_settings_api
 
 on:
   pull_request:
-    paths:
-      - "packages/shared_preferences_settings_api/**"
-      - ".github/workflows/shared_preferences_settings_api.yaml"
+    # paths:
+    #   - "packages/shared_preferences_settings_api/**"
+    #   - ".github/workflows/shared_preferences_settings_api.yaml"
     branches:
       - master
 
