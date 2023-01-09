@@ -2,9 +2,9 @@ name: exchange_rates_repository
 
 on:
   pull_request:
-    # paths:
-    #   - "packages/exchange_rates_repository/**"
-    #   - ".github/workflows/exchange_rates_repository.yaml"
+    paths:
+      - "packages/exchange_rates_repository/**"
+      - ".github/workflows/exchange_rates_repository.yaml"
     branches:
       - master
 
