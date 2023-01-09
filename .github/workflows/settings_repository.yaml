@@ -2,9 +2,9 @@ name: settings_repository
 
 on:
   pull_request:
-    # paths:
-    #   - "packages/settings_repository/**"
-    #   - ".github/workflows/settings_repository.yaml"
+    paths:
+      - "packages/settings_repository/**"
+      - ".github/workflows/settings_repository.yaml"
     branches:
       - master
 
