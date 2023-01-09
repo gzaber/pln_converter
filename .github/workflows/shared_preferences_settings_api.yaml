@@ -1,6 +1,10 @@
 name: shared_preferences_settings_api
+
 on:
   pull_request:
+    paths:
+      - "packages/shared_preferences_settings_api/**"
+      - ".github/workflows/shared_preferences_settings_api.yaml"
     branches:
       - master
 
@@ -19,11 +23,18 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-      - run: flutter pub get
-      - run: flutter analyze
-      - run: flutter test --coverage
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze lib
+
+      - name: Run tests
+        run: flutter test --coverage
+
       - name: Upload coverage to codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          name: shared_preferences_settings_api
+        run: |
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov
