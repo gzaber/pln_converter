@@ -1,4 +1,4 @@
-<a href="https://github.com/gzaber/pln_converter/actions"><img src="https://img.shields.io/github/workflow/status/gzaber/pln_converter/ci" alt="build"></a>
+<a href="https://github.com/gzaber/pln_converter/actions"><img src="https://img.shields.io/github/actions/workflow/status/gzaber/pln_converter/main.yaml" alt="build"></a>
 <a href="https://codecov.io/gh/gzaber/pln_converter"><img src="https://codecov.io/gh/gzaber/pln_converter/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/gzaber/pln_converter" alt="license MIT"></a>
 
