@@ -4,8 +4,9 @@
 
 # pln_converter
 
-Polish zloty (PLN) converter to foreign currencies.  
-It uses [NBP Web API](http://api.nbp.pl/en.html) to fetching middle exchange rates of foreign currencies.
+Polish zloty (PLN) converter.
+It converts polish zloty to foreign currencies and vice versa.  
+It uses [NBP Web API](http://api.nbp.pl/en.html) to fetch middle exchange rates of foreign currencies.
 
 ## Table of contents
 
@@ -18,24 +19,27 @@ It uses [NBP Web API](http://api.nbp.pl/en.html) to fetching middle exchange rat
 
 ## Screenshots
 
-[<img alt="Convert PLN to EUR" width="200px" src=".screenshots/home_converter_eur_down.png" />](.screenshots/home_converter_eur_down.png)
-[<img alt="Convert EUR to PLN" width="200px" src=".screenshots/home_converter_eur_up.png" />](.screenshots/home_converter_eur_up.png)
-[<img alt="Convert EUR to PLN" width="200px" src=".screenshots/change_currency.png" />](.screenshots/change_currency.png)
-[<img alt="Convert CHF to PLN" width="200px" src=".screenshots/home_converter_chf_up.png" />](.screenshots/home_converter_chf_up.png)
+[<img alt="converter page" width="250px" src=".screenshots/converter_page.png" />](.screenshots/converter_page.png)
+&nbsp;
+[<img alt="exchange rates page" width="250px" src=".screenshots/exchange_rates_page.png" />](.screenshots/exchange_rates_page.png)
+&nbsp;
+[<img alt="settings page" width="250px" src=".screenshots/settings_page.png" />](.screenshots/settings_page.png)
 
-[<img alt="Exchange rates" width="200px" src=".screenshots/home_exchange_rates.png" />](.screenshots/home_exchange_rates.png)
-[<img alt="Search exchange rates" width="200px" src=".screenshots/home_exchange_rates_search.png" />](.screenshots/home_exchange_rates_search.png)
-[<img alt="Settings dark theme" width="200px" src=".screenshots/home_settings.png" />](.screenshots/home_settings.png)
-[<img alt="Settings light theme" width="200px" src=".screenshots/home_settings_light_theme.png" />](.screenshots/home_settings_light_theme.png)
+[<img alt="converter page recording" width="250px" src=".screenshots/converter_page_recording.gif" />](.screenshots/converter_page_recording.gif)
+&nbsp;
+[<img alt="exchange rates page recording" width="250px" src=".screenshots/exchange_rates_page_recording.gif" />](.screenshots/exchange_rates_page_recording.gif)
+&nbsp;
+[<img alt="settings page recording" width="250px" src=".screenshots/settings_page_recording.gif" />](.screenshots/settings_page_recording.gif)
 
 ## Features
 
 - convert PLN to foreign currency and vice versa
 - change foreign currency
 - list of foreign exchange rates
+- search exchange rates
 - light / dark theme
 - local storage of foreign currency and type of theme
-- supported locales: pl, en
+- supported locales: en, pl
 
 ## Packages used
 
@@ -63,7 +67,13 @@ Run the tests using your IDE or using the following command:
 $ flutter test --coverage
 ```
 
-For local packages run above command in package root directory.
+For local Flutter packages run the above command in the package root directory.  
+For local Dart packages run the following commands in the package root directory:
+
+```
+$ dart pub global activate coverage
+$ dart pub global run coverage:test_with_coverage
+```
 
 ## Run
 
