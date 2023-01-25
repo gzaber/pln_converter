@@ -23,7 +23,7 @@ class SettingsPage extends StatelessWidget {
           children: [
             Text(
               AppLocalizations.of(context)!.settingsTheme,
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
             RadioListTile<AppTheme>(
               key: const Key('settingsPage_lightTheme_radioListTile'),
