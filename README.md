@@ -45,8 +45,6 @@ It uses [NBP Web API](http://api.nbp.pl/en.html) to fetch middle exchange rates 
 
 - bloc
 - dio
-- equatable
-- intl
 - json_annotation
 - shared_preferences
 
